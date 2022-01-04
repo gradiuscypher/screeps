@@ -1,7 +1,3 @@
-export interface HarvesterInterface {
-    creep: Creep;
-}
-
 export class Harvester {
     private creep: Creep;
 

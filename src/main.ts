@@ -1,6 +1,10 @@
 import { ErrorMapper } from "utils/ErrorMapper";
 import { Spawner } from "modules/functions/spawner";
 import { Harvester } from "modules/creeps/harvester";
+import { Upgrader } from "modules/creeps/upgrader";
+import { Builder } from "modules/creeps/builder";
+
+let spawn_manager = new Spawner;
 
 declare global {
     /*
@@ -34,8 +38,6 @@ declare global {
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-    let spawn_manager = new Spawner;
-    spawn_manager.check_spawns();
     console.log(`Current game tick is ${Game.time}`);
 
     // Automatically delete memory of missing creeps
@@ -45,25 +47,26 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
     }
 
-    /*
-    Things to complete:
-        * Spawning logic
-        * Automatic energy collection
-        * Automatic base upgrading
-        * Automatic construction
-    */
-    // do we need to spawn anyone?
+    // manage our spawns and make sure we have what we need
+    spawn_manager.check_spawns();
 
     // iterate through every creep and give it a job
     for (const name in Game.creeps) {
         let target_creep: Creep = Game.creeps[name];
-        console.log(`${target_creep.name} : ${target_creep.memory.role}`);
-
         // do role things
         switch (target_creep.memory.role) {
             case 'harvester':
                 let harvester = new Harvester(target_creep);
                 harvester.harvest();
+                break;
+            case 'upgrader':
+                let upgrader = new Upgrader(target_creep);
+                upgrader.upgrade();
+                break;
+            case 'builder':
+                let builder = new Builder(target_creep);
+                builder.build();
+                break;
         }
     }
 });
