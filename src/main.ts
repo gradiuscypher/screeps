@@ -40,7 +40,7 @@ declare global {
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-    console.log(`Current game tick is ${Game.time} game`);
+    console.log(`Current game tick is ${Game.time}`);
 
     // Automatically delete memory of missing creeps
     for (const name in Memory.creeps) {
@@ -50,7 +50,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
 
     // manage any needed construction sites
-    construction_manager.run_manager();
+    // let troom = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;
+    // construction_manager.run_manager(troom);
 
     // manage our spawns and make sure we have what we need
     spawn_manager.check_spawns();
