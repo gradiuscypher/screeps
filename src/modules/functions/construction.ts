@@ -30,6 +30,7 @@ export class Construction {
         // TODO: need to consider extension construction sites in the current extension count
         let total_extension_count = (Math.max(0, (room_level - 2)) * 5) * 2;
         let current_extension_count = room.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_EXTENSION } }).length;
+        let current_construction_count = room.find(FIND_CONSTRUCTION_SITES, { filter: (site) => { return site.structureType == STRUCTURE_EXTENSION } }).length;
 
         let found_spot = false;
         // our target point will be our room spawn
@@ -38,12 +39,11 @@ export class Construction {
         // TODO: we might need to add some bounds to this loop, otherwise we might run out of space? Need to handle errors more gracefully
         // put the spawn point in the queue
         let filled_spots = room.find(FIND_MY_SPAWNS) ? [room.find(FIND_MY_SPAWNS)[0].pos] : [];
-        // let filled_spots: RoomPosition[] = []
 
         // check each of the diagonals, if it isn't free, push it onto a queue
-        while (!found_spot && (current_extension_count < total_extension_count) && filled_spots.length) {
+        while (!found_spot && (current_extension_count + current_construction_count < total_extension_count) && filled_spots.length) {
             // TODO: is this magic ! the best way?
-            console.log(`filled_spots: ${filled_spots}`)
+            // console.log(`filled_spots: ${filled_spots}`)
             let target_point = filled_spots.shift()!;
 
             // check each of the diagonals, if it isn't free, push it onto a queue
@@ -57,6 +57,7 @@ export class Construction {
                 if (!at_spot.find(obj => obj.constructionSite || obj.structure)) {
                     // checking whether we need more construction sites here to ensure we don't try to make more than are allowed
                     if (at_spot.find(obj => obj.terrain == 'plain') && !found_spot) {
+                        room.createConstructionSite(new_point.x, new_point.y, STRUCTURE_EXTENSION);
                         console.log(`Trying new point: ${new_point} and found: ${room.lookAt(new_point)[0].terrain}`);
                         found_spot = true;
                     }
@@ -64,7 +65,7 @@ export class Construction {
                 // otherwise, add the point to the queue to check next
                 else {
                     filled_spots.push(new_point);
-                    console.log(`Bad point: ${new_point} found: ${room.lookAt(new_point)[0].terrain}`);
+                    // console.log(`Bad point: ${new_point} found: ${room.lookAt(new_point)[0].terrain}`);
                 }
             });
         }
