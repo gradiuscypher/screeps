@@ -4,9 +4,11 @@ import { Harvester } from "modules/creeps/harvester";
 import { Upgrader } from "modules/creeps/upgrader";
 import { Builder } from "modules/creeps/builder";
 import { Construction } from "modules/functions/construction";
+import { Summary } from "modules/functions/summary";
 
 let spawn_manager = new Spawner;
 let construction_manager = new Construction();
+let summary_manager = new Summary();
 
 declare global {
     /*
@@ -40,7 +42,6 @@ declare global {
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-    console.log(`Current game tick is ${Game.time}`);
 
     // Automatically delete memory of missing creeps
     for (const name in Memory.creeps) {
@@ -49,8 +50,13 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
     }
 
-    // manage any needed construction sites
+    // TODO: this is very single room centric, need to adjust this later
     let troom = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;
+
+    // room summary every 5 ticks
+    summary_manager.room_summary(troom);
+
+    // manage the construction required
     construction_manager.run_manager(troom);
 
     // manage our spawns and make sure we have what we need

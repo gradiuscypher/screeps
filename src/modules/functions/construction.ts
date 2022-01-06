@@ -1,6 +1,20 @@
 export class Construction {
     public run_manager(room: Room) {
         this.build_extension(room);
+        // this.build_mining_containers(room);
+    }
+    private build_mining_containers(room: Room) {
+        // check if we need mining containers
+        // find the sources
+        let sources = room.find(FIND_SOURCES);
+        // create a container next to the sources
+        sources.forEach(source => {
+            let area_look = room.lookAtArea(source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true);
+            let t_filter = _.filter(area_look, (point) => point.type == 'terrain');
+            t_filter.forEach(position => {
+                console.log(`${position.x}, ${position.y}: ${position.terrain}`)
+            })
+        });
     }
     private build_extension(room: Room) {
         let diagonals = [
@@ -9,7 +23,6 @@ export class Construction {
             [-1, 1],
             [1, 1]
         ]
-
 
         /*
         Controller level
@@ -27,7 +40,6 @@ export class Construction {
             * if there is no free one, iterate through each of the diagonals and check their diagonals till you find a free space
         */
         let room_level = (room.controller == undefined) ? 0 : room.controller.level;
-        // TODO: need to consider extension construction sites in the current extension count
         let total_extension_count = (Math.max(0, (room_level - 2)) * 5) * 2;
         let current_extension_count = room.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_EXTENSION } }).length;
         let current_construction_count = room.find(FIND_CONSTRUCTION_SITES, { filter: (site) => { return site.structureType == STRUCTURE_EXTENSION } }).length;
@@ -43,11 +55,9 @@ export class Construction {
         // check each of the diagonals, if it isn't free, push it onto a queue
         while (!found_spot && (current_extension_count + current_construction_count < total_extension_count) && filled_spots.length) {
             // TODO: is this magic ! the best way?
-            // console.log(`filled_spots: ${filled_spots}`)
             let target_point = filled_spots.shift()!;
 
             // check each of the diagonals, if it isn't free, push it onto a queue
-            // lookAt.type will give us the type, need to ensure there isn't a site/extension already there, and need to ensure the terrian is able to be used.
             diagonals.forEach(mod => {
                 let new_point: RoomPosition = new RoomPosition(target_point.x + mod[0], target_point.y + mod[1], room.name);
                 let at_spot = room.lookAt(new_point);

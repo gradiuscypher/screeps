@@ -1,9 +1,6 @@
 export class Upgrader {
     private creep: Creep;
 
-    /**
-     *
-     */
     constructor(target_creep: Creep) {
         this.creep = target_creep;
     }

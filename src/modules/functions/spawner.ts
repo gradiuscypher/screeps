@@ -1,9 +1,9 @@
 export class Spawner {
     public check_spawns() {
         // max role settings
-        const MAX_BUILDERS = 0;
-        const MAX_HARVESTERS = 5;
-        const MAX_UPGRADERS = 5;
+        const MAX_BUILDERS = 5;
+        const MAX_HARVESTERS = 2;
+        const MAX_UPGRADERS = 2;
         const REQ_ENERGY = 200;
 
         // role blueprints
