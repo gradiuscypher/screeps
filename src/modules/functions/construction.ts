@@ -9,6 +9,8 @@ export class Construction {
             [-1, 1],
             [1, 1]
         ]
+
+
         /*
         Controller level
         2 	5 extensions (50 capacity)
@@ -18,22 +20,54 @@ export class Construction {
         6 	40 extensions (50 capacity)
         7 	50 extensions (100 capacity)
         8 	60 extensions (200 capacity)
+
+        Test algo:
+        * given a point, find the first diagonal at that point that's free
+            * if there's a free one, build an extension there
+            * if there is no free one, iterate through each of the diagonals and check their diagonals till you find a free space
         */
+        let room_level = (room.controller == undefined) ? 0 : room.controller.level;
+        // TODO: need to consider extension construction sites in the current extension count
+        let total_extension_count = (Math.max(0, (room_level - 2)) * 5) * 2;
+        let current_extension_count = room.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_EXTENSION } }).length;
 
-        // find the extensions and and see if there's a free diagonal
-        let extensions = room.find(FIND_CONSTRUCTION_SITES, { filter: { structureType: STRUCTURE_EXTENSION } });
-        let spawns = room.find(FIND_MY_SPAWNS);
+        let found_spot = false;
+        // our target point will be our room spawn
 
-        let extcon = spawns[0].pos.findInRange(FIND_CONSTRUCTION_SITES, 1, { filter: { structureType: STRUCTURE_EXTENSION } });
-        console.log(`extcon: ${extcon}`);
-        // for (const extension in extensions) {
-        //     console.log(`extensions: ${extensions[extension]}`);
-        // }
+        // do this loop till we have found a spot
+        // TODO: we might need to add some bounds to this loop, otherwise we might run out of space? Need to handle errors more gracefully
+        // put the spawn point in the queue
+        let filled_spots = room.find(FIND_MY_SPAWNS) ? [room.find(FIND_MY_SPAWNS)[0].pos] : [];
+        // let filled_spots: RoomPosition[] = []
 
-        // if there are no current extensions in the room, find the spawn and find a free diagonal
-        console.log(`spawns: ${spawns}`);
+        // check each of the diagonals, if it isn't free, push it onto a queue
+        while (!found_spot && (current_extension_count < total_extension_count) && filled_spots.length) {
+            // TODO: is this magic ! the best way?
+            console.log(`filled_spots: ${filled_spots}`)
+            let target_point = filled_spots.shift()!;
 
-        // let spawn = Game.rooms[name].find(FIND_MY_SPAWNS)[0];
+            // check each of the diagonals, if it isn't free, push it onto a queue
+            // lookAt.type will give us the type, need to ensure there isn't a site/extension already there, and need to ensure the terrian is able to be used.
+            diagonals.forEach(mod => {
+                let new_point: RoomPosition = new RoomPosition(target_point.x + mod[0], target_point.y + mod[1], room.name);
+                let at_spot = room.lookAt(new_point);
+
+                // check if the spot is a construction site or a structure, then validate that it's a plain
+                // if it is, and we need one, put a construction site down and set found_spot to true
+                if (!at_spot.find(obj => obj.constructionSite || obj.structure)) {
+                    // checking whether we need more construction sites here to ensure we don't try to make more than are allowed
+                    if (at_spot.find(obj => obj.terrain == 'plain') && !found_spot) {
+                        console.log(`Trying new point: ${new_point} and found: ${room.lookAt(new_point)[0].terrain}`);
+                        found_spot = true;
+                    }
+                }
+                // otherwise, add the point to the queue to check next
+                else {
+                    filled_spots.push(new_point);
+                    console.log(`Bad point: ${new_point} found: ${room.lookAt(new_point)[0].terrain}`);
+                }
+            });
+        }
 
     }
     private build_road() {
