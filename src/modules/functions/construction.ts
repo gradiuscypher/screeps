@@ -42,6 +42,7 @@ export class Construction {
             }
         }
     }
+
     private build_extension(room: Room) {
         let diagonals = [
             [-1, -1],
@@ -109,6 +110,7 @@ export class Construction {
         }
 
     }
+
     private build_road() {
 
     }

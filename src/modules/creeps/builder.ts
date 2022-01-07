@@ -38,7 +38,6 @@ export class Builder {
             }
 
             if (this.creep.memory.task == 'repairing') {
-                this.creep.say("Repairing!")
                 if (this.creep.repair(repair_targets[0]) == ERR_NOT_IN_RANGE) {
                     this.creep.moveTo(repair_targets[0], { visualizePathStyle: { stroke: '#1ab844' } });
                 }
@@ -48,7 +47,6 @@ export class Builder {
             // TODO: need to set priorities on buildings
             let t_buildings = this.creep.room.find(FIND_CONSTRUCTION_SITES);
             if (t_buildings.length && this.creep.memory.task == '') {
-                this.creep.say("Building!")
                 if (this.creep.build(t_buildings[0]) == ERR_NOT_IN_RANGE) {
                     this.creep.moveTo(t_buildings[0], { visualizePathStyle: { stroke: '#ffffff' } });
                 }

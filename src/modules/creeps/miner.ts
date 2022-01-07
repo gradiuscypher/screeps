@@ -1,3 +1,5 @@
+// TODO: actually implement the mining portion
+
 export class Miner {
     private creep: Creep;
 

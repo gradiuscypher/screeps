@@ -2,7 +2,6 @@
 
 ## Current Work
 * container mining
-* structure upkeep
 * transport creeps
 
 ## Next Up
@@ -19,3 +18,8 @@
 * Implement Towers
 * Implement Roads
 * Implement storage
+* Better repairing logic
+* Some sort of resting area for idle creeps so they're not in the way
+
+## Done / Abandoned
+* structure upkeep - technically have repairing, but could be better
