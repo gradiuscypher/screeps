@@ -1,20 +1,46 @@
+
+
 export class Construction {
     public run_manager(room: Room) {
         this.build_extension(room);
-        // this.build_mining_containers(room);
+        this.build_mining_containers(room);
     }
     private build_mining_containers(room: Room) {
+        let surrounding_points = [
+            [-1, -1],
+            [0, -1],
+            [1, -1],
+            [-1, 0],
+            [1, 0],
+            [-1, 1],
+            [0, 1],
+            [1, 1]
+        ];
         // check if we need mining containers
         // find the sources
         let sources = room.find(FIND_SOURCES);
         // create a container next to the sources
-        sources.forEach(source => {
+        for (let source of sources) {
             let area_look = room.lookAtArea(source.pos.y - 1, source.pos.x - 1, source.pos.y + 1, source.pos.x + 1, true);
-            let t_filter = _.filter(area_look, (point) => point.type == 'terrain');
-            t_filter.forEach(position => {
-                console.log(`${position.x}, ${position.y}: ${position.terrain}`)
-            })
-        });
+            let container_filter = _.filter(area_look, (point) => point.structure?.structureType == STRUCTURE_CONTAINER || point.constructionSite?.structureType == STRUCTURE_CONTAINER);
+            if (container_filter.length > 0) {
+                continue;
+            }
+            // check each of the points and determine where a mining container should go
+            // TODO: we can break this out into a utility function at some point
+            for (let mod of surrounding_points) {
+                let new_x = source.pos.x + mod[0];
+                let new_y = source.pos.y + mod[1];
+                let at_spot = room.lookAt(new_x, new_y);
+
+                if (!at_spot.find(obj => obj.constructionSite || obj.structure)) {
+                    if (at_spot.find(obj => obj.terrain == 'plain')) {
+                        room.createConstructionSite(new_x, new_y, STRUCTURE_CONTAINER);
+                        break;
+                    }
+                }
+            }
+        }
     }
     private build_extension(room: Room) {
         let diagonals = [
@@ -22,7 +48,7 @@ export class Construction {
             [1, -1],
             [-1, 1],
             [1, 1]
-        ]
+        ];
 
         /*
         Controller level
@@ -59,6 +85,8 @@ export class Construction {
 
             // check each of the diagonals, if it isn't free, push it onto a queue
             diagonals.forEach(mod => {
+                // TODO: I can combine these two lines into one, I don't need a RoomPosition object
+                // TODO: can use a for loop like above instead of forEach
                 let new_point: RoomPosition = new RoomPosition(target_point.x + mod[0], target_point.y + mod[1], room.name);
                 let at_spot = room.lookAt(new_point);
 

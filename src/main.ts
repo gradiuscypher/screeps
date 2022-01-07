@@ -1,6 +1,7 @@
 import { ErrorMapper } from "utils/ErrorMapper";
 import { Spawner } from "modules/functions/spawner";
 import { Harvester } from "modules/creeps/harvester";
+import { Miner } from "modules/creeps/miner";
 import { Upgrader } from "modules/creeps/upgrader";
 import { Builder } from "modules/creeps/builder";
 import { Construction } from "modules/functions/construction";
@@ -29,6 +30,7 @@ declare global {
         role: string;
         room: string;
         working: boolean;
+        task: string;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
@@ -70,6 +72,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
             case 'harvester':
                 let harvester = new Harvester(target_creep);
                 harvester.harvest();
+                // let miner = new Miner(target_creep);
+                // miner.primary_action();
                 break;
             case 'upgrader':
                 let upgrader = new Upgrader(target_creep);

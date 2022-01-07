@@ -1,7 +1,7 @@
 export class Spawner {
     public check_spawns() {
         // max role settings
-        const MAX_BUILDERS = 5;
+        const MAX_BUILDERS = 3;
         const MAX_HARVESTERS = 2;
         const MAX_UPGRADERS = 2;
         const REQ_ENERGY = 200;
@@ -24,13 +24,13 @@ export class Spawner {
             let timestamp = Game.time.toString();
 
             if (harvesters.length < MAX_HARVESTERS) {
-                Game.spawns['Spawn1'].spawnCreep(HARVESTER_BP, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false } });
+                Game.spawns['Spawn1'].spawnCreep(HARVESTER_BP, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '' } });
             }
             else if (builders.length < MAX_BUILDERS) {
-                Game.spawns['Spawn1'].spawnCreep(BUILDER_BP, 'b' + timestamp, { memory: { role: 'builder', room: room.name, working: false } });
+                Game.spawns['Spawn1'].spawnCreep(BUILDER_BP, 'b' + timestamp, { memory: { role: 'builder', room: room.name, working: false, task: '' } });
             }
             else if (upgraders.length < MAX_UPGRADERS) {
-                Game.spawns['Spawn1'].spawnCreep(UPGRADER_BP, 'u' + timestamp, { memory: { role: 'upgrader', room: room.name, working: false } });
+                Game.spawns['Spawn1'].spawnCreep(UPGRADER_BP, 'u' + timestamp, { memory: { role: 'upgrader', room: room.name, working: false, task: '' } });
             }
         }
     }

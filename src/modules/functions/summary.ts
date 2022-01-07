@@ -4,7 +4,8 @@ export class Summary {
             let summary_string = "";
             summary_string += `[${Game.time}] `;
             summary_string += `E:${room.energyAvailable}/${room.energyCapacityAvailable} `;
-            summary_string += `C:${Object.keys(Game.creeps).length}`
+            summary_string += `S:${Object.keys(Game.creeps).length} `;
+            summary_string += `C:(${room.controller?.ticksToDowngrade}) ${room.controller?.progress}/${room.controller?.progressTotal}`;
             console.log(summary_string);
         }
     }
