@@ -6,10 +6,12 @@ import { Upgrader } from "modules/creeps/upgrader";
 import { Builder } from "modules/creeps/builder";
 import { Construction } from "modules/functions/construction";
 import { Summary } from "modules/functions/summary";
+import { HelperFunctions } from "utils/HelperFunctions"
 
 let spawn_manager = new Spawner;
 let construction_manager = new Construction();
 let summary_manager = new Summary();
+let helper = new HelperFunctions();
 
 declare global {
     /*
@@ -44,7 +46,6 @@ declare global {
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-
     // Automatically delete memory of missing creeps
     for (const name in Memory.creeps) {
         if (!(name in Game.creeps)) {
@@ -72,8 +73,6 @@ export const loop = ErrorMapper.wrapLoop(() => {
             case 'harvester':
                 let harvester = new Harvester(target_creep);
                 harvester.harvest();
-                // let miner = new Miner(target_creep);
-                // miner.primary_action();
                 break;
             case 'upgrader':
                 let upgrader = new Upgrader(target_creep);
@@ -82,6 +81,10 @@ export const loop = ErrorMapper.wrapLoop(() => {
             case 'builder':
                 let builder = new Builder(target_creep);
                 builder.build();
+                break;
+            case 'miner':
+                let miner = new Miner(target_creep);
+                miner.primary_action();
                 break;
         }
     }

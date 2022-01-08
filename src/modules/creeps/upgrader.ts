@@ -1,3 +1,7 @@
+import { HelperFunctions } from "utils/HelperFunctions"
+
+let helper = new HelperFunctions();
+
 export class Upgrader {
     private creep: Creep;
 
@@ -21,9 +25,18 @@ export class Upgrader {
             }
         }
         else {
-            let sources = this.creep.room.find(FIND_SOURCES);
-            if (this.creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
-                this.creep.moveTo(sources[1], { visualizePathStyle: { stroke: '#ffaa00' } });
+            let source = helper.find_energy_source(this.creep.room);
+
+            if (source instanceof StructureContainer || source instanceof StructureStorage) {
+                if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
+                }
+            }
+
+            else {
+                if (source && this.creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                    this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
+                }
             }
         }
     }

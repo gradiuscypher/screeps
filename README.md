@@ -1,13 +1,15 @@
 # gradius' screeps code - Typescript Edition!
 
 ## Current Work
-* container mining
 * transport creeps
 
 ## Next Up
 * dynamic use of containers for building/upgrading/upkeep
+* source finder function should use distance too
+* need a better way for miners to track their location rather than just staggered TTLs, need miners to claim a spot and keep it
 
 ## Ideal Pool
+* Need to lock in source finder decision so that screeps don't keep swapping sources based on current eval
 * Generic actions for screep roles rather than specific named ones (eg: primary_action rather than build)
 * building priorities
 * Generic construction actions for finding buildable points around a point
@@ -20,6 +22,8 @@
 * Implement storage
 * Better repairing logic
 * Some sort of resting area for idle creeps so they're not in the way
+* Keep track of time spent idle
 
 ## Done / Abandoned
 * structure upkeep - technically have repairing, but could be better
+* container mining
