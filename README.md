@@ -7,6 +7,7 @@
 * dynamic use of containers for building/upgrading/upkeep
 * source finder function should use distance too
 * need a better way for miners to track their location rather than just staggered TTLs, need miners to claim a spot and keep it
+* miners are overmining, need to either clean up resources or reduce mining ability
 
 ## Ideal Pool
 * Need to lock in source finder decision so that screeps don't keep swapping sources based on current eval
