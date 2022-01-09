@@ -1,9 +1,11 @@
 # gradius' screeps code - Typescript Edition!
 
 ## Current Work
+* creeps dance when trying to fill storage
 * transport creeps
 
 ## Next Up
+* tag a building to make sure it doesn't decay, rather than repairing decay
 * dynamic use of containers for building/upgrading/upkeep
 * source finder function should use distance too
 * need a better way for miners to track their location rather than just staggered TTLs, need miners to claim a spot and keep it

@@ -30,16 +30,17 @@ export class HelperFunctions {
         }
     }
 
-    public find_energy_source(room: Room) {
+    public find_energy_source(room: Room, ignore_storage: boolean = false) {
+        let MIN_ENERGY = 50;
         // are there a storage?
-        if (room.storage) {
+        if (!ignore_storage && room.storage && room.storage.store.energy > MIN_ENERGY) {
             return room.storage;
         }
 
         // are there any containers?
         let containers: StructureContainer[] = room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType == STRUCTURE_CONTAINER)
+                return (structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > MIN_ENERGY)
             }
         });
         for (let container of containers) {

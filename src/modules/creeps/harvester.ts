@@ -5,16 +5,13 @@ let helper = new HelperFunctions();
 export class Harvester {
     private creep: Creep;
 
-    /**
-     *
-     */
     constructor(target_creep: Creep) {
         this.creep = target_creep;
     }
 
     public harvest() {
         if (this.creep.store.getFreeCapacity() > 0) {
-            let source = helper.find_energy_source(this.creep.room);
+            let source = helper.find_energy_source(this.creep.room, true);
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -28,6 +25,7 @@ export class Harvester {
                 }
             }
         }
+
         else {
             let spawn_targets = this.creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
