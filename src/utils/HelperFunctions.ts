@@ -93,4 +93,48 @@ export class HelperFunctions {
 
         return room.lookAtArea(y0, x0, y1, x1, true);
     }
+
+    public next_diagonal_out(room: Room, x: number, y: number, scale: number) {
+        let diagonals = [
+            [-1, -1],
+            [1, -1],
+            [-1, 1],
+            [1, 1]
+        ];
+        let multiplier = 1;
+        let point_found = false;
+        let stop_looking = false;
+        let new_x = 0;
+        let new_y = 0;
+
+        while (!stop_looking) {
+            for (let mod of diagonals) {
+                new_x = (mod[0] * (scale * multiplier)) + x;
+                new_y = (mod[1] * (scale * multiplier)) + y;
+
+                if (new_x > 49 || new_y > 49 || new_x < 0 || new_y < 0) {
+                    console.log(`Hit limit: ${new_x}, ${new_y}`);
+                    stop_looking = true;
+                    break;
+                }
+
+                console.log(`Trying diagonal: ${new_x}, ${new_y}`);
+                let current_point = room.lookAt(new_x, new_y);
+                if (current_point.length == 1 && current_point[0].terrain == 'plain') {
+                    console.log(`I found a point at diagonal: ${new_x}, ${new_y}`);
+                    stop_looking = true;
+                    point_found = true;
+                    break;
+                }
+            }
+            multiplier += 1;
+        }
+
+        if (point_found) {
+            return [new_x, new_y];
+        }
+        else {
+            return undefined;
+        }
+    }
 }

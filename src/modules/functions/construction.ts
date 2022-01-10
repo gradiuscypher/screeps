@@ -1,9 +1,12 @@
+import { HelperFunctions } from "utils/HelperFunctions"
 
+let helper = new HelperFunctions();
 
 export class Construction {
     public run_manager(room: Room) {
         this.build_extension(room);
         this.build_mining_containers(room);
+        this.build_tower(room);
     }
     private build_mining_containers(room: Room) {
         let surrounding_points = [
@@ -115,9 +118,46 @@ export class Construction {
 
     }
 
-    private build_tower() {
-        // separate the room into quadrants, spread towers between them, working from the center of the room outward.
-        // quadrants are defined clockwise:
-        // q1: (x,y)= (0-24, 0-24), q2: (26-49, 0-24), q3: (26-49, 26-49), q4: (0-24, 26-49)
+    private build_tower(room: Room) {
+        /*
+        Controller level
+        1-2 	—
+        3-4 	1 tower
+        5-6 	2 towers
+        7 	    3 towers
+        8 	    6 towers
+        */
+        let tower_counts: Record<number, number> = {
+            0: 0,
+            1: 0,
+            2: 0,
+            3: 1,
+            4: 1,
+            5: 2,
+            6: 2,
+            7: 3,
+            8: 6
+        }
+
+        // check if we need to build a tower
+        let room_level = (room.controller == undefined) ? 0 : room.controller.level;
+        let tower_construction_count = room.find(FIND_MY_CONSTRUCTION_SITES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_TOWER
+            }
+        }).length;
+        let tower_count = room.find(FIND_MY_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_TOWER;
+            }
+        }).length;
+
+        // find the next diagonal out that we can build a tower on and make a site
+        if (tower_counts[room_level] > tower_construction_count + tower_count) {
+            let new_point = helper.next_diagonal_out(room, 25, 25, 3);
+            if (new_point) {
+                room.createConstructionSite(new_point[0], new_point[1], STRUCTURE_TOWER);
+            }
+        }
     }
 }
