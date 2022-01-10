@@ -59,4 +59,38 @@ export class HelperFunctions {
         // didnt find anything return null
         return null
     }
+    public * quadrant_generator(quadrant: number) {
+        // separate the room into quadrants, working from the center of the room outward.
+        // ignores x=25 and y=25 to more easily split the room into even bits
+        // quadrants are defined clockwise:
+        // q1: (x,y)= (0-24, 0-24), q2: (26-49, 0-24), q3: (26-49, 26-49), q4: (0-24, 26-49)
+        const range = (start: number, stop: number, step: number) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step));
+        let quadrants: Record<number, number[]> = {
+            0: [0, 24, 0, 24],
+            1: [26, 49, 0, 24],
+            2: [26, 49, 26, 49],
+            3: [0, 24, 26, 49]
+        }
+        let tq = quadrants[quadrant];
+        for (let x of range(tq[1], tq[0], -1)) {
+            for (let y of range(tq[3], tq[2], -1)) {
+                yield [x, y];
+            }
+        }
+    }
+
+    public look_at_quadrant(quadrant: number, room: Room) {
+        let quadrants: Record<number, number[]> = {
+            0: [0, 24, 0, 24],
+            1: [26, 49, 0, 24],
+            2: [26, 49, 26, 49],
+            3: [0, 24, 26, 49]
+        }
+        let x0 = quadrants[quadrant][0]
+        let x1 = quadrants[quadrant][1]
+        let y0 = quadrants[quadrant][2]
+        let y1 = quadrants[quadrant][3]
+
+        return room.lookAtArea(y0, x0, y1, x1, true);
+    }
 }

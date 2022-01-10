@@ -114,4 +114,10 @@ export class Construction {
     private build_road() {
 
     }
+
+    private build_tower() {
+        // separate the room into quadrants, spread towers between them, working from the center of the room outward.
+        // quadrants are defined clockwise:
+        // q1: (x,y)= (0-24, 0-24), q2: (26-49, 0-24), q3: (26-49, 26-49), q4: (0-24, 26-49)
+    }
 }

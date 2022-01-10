@@ -13,6 +13,7 @@ let construction_manager = new Construction();
 let summary_manager = new Summary();
 let helper = new HelperFunctions();
 
+
 declare global {
     /*
       Example types, expand on these or remove them and add your own.
@@ -55,6 +56,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
     // TODO: this is very single room centric, need to adjust this later
     let troom = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;
+
+    let search_target = _.filter(helper.look_at_quadrant(0, troom), (location) => true)
 
     // room summary every 5 ticks
     summary_manager.room_summary(troom);

@@ -21,7 +21,7 @@ export class Miner {
                 // TODO: error catching
                 // OPT: do we really need this comparison, or should we assume and just error out if not
                 // if there's a free location, move to it
-                console.log(`Miner Container Location: ${container_loc}`);
+                // console.log(`Miner Container Location: ${container_loc}`);
                 this.creep.moveTo(container_loc);
             }
         }
