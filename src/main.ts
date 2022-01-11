@@ -7,11 +7,13 @@ import { Builder } from "modules/creeps/builder";
 import { Construction } from "modules/functions/construction";
 import { Summary } from "modules/functions/summary";
 import { HelperFunctions } from "utils/HelperFunctions"
+import { TowerController } from "modules/functions/tower";
 
 let spawn_manager = new Spawner;
 let construction_manager = new Construction();
 let summary_manager = new Summary();
 let helper = new HelperFunctions();
+let tower_controller = new TowerController();
 
 
 declare global {
@@ -65,6 +67,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
     // manage our spawns and make sure we have what we need
     spawn_manager.check_spawns();
+
+    tower_controller.primary_function(troom);
 
     // iterate through every creep and give it a job
     for (const name in Game.creeps) {

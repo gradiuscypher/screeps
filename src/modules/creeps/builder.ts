@@ -25,18 +25,47 @@ export class Builder {
 
         // they're doing working
         if (this.creep.memory.working) {
+            // console.log(`${this.creep.memory.task}`)
+            // tower fill logic
+            let tower_targets: StructureTower[] = this.creep.room.find(FIND_STRUCTURES, {
+                filter: (structure: StructureTower) => {
+                    return (structure.structureType == STRUCTURE_TOWER && structure.store.getUsedCapacity(RESOURCE_ENERGY) / structure.store.getCapacity(RESOURCE_ENERGY) < 0.95);
+                }
+            });
+
+            for (let target of tower_targets) {
+                // console.log(`${target.store.getUsedCapacity(RESOURCE_ENERGY) / target.store.getCapacity(RESOURCE_ENERGY)}`);
+
+                if ((target.store.getUsedCapacity(RESOURCE_ENERGY) / target.store.getCapacity(RESOURCE_ENERGY)) < 0.8) {
+                    this.creep.memory.task = 'filling';
+                }
+                if (this.creep.memory.task == 'filling' && (target.store.getUsedCapacity(RESOURCE_ENERGY) / target.store.getCapacity(RESOURCE_ENERGY)) >= 0.95) {
+                    this.creep.memory.task = '';
+                }
+            }
+
+            if (this.creep.memory.task == 'filling') {
+                if (this.creep.transfer(tower_targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    this.creep.moveTo(tower_targets[0], { visualizePathStyle: { stroke: '#1ab844' } });
+                }
+                else if (tower_targets.length < 1) {
+                    this.creep.memory.task = '';
+                }
+            }
+
             // repair logic
             let repair_targets = this.creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.hits < structure.hitsMax)
+                    return ((structure.hits / structure.hitsMax) < 0.8);
                 }
             });
+            // console.log(`repairtargets: ${repair_targets}`);
 
             for (let target of repair_targets) {
                 if ((target.hits / target.hitsMax) < 0.4) {
                     this.creep.memory.task = 'repairing';
                 }
-                else if ((target.hits / target.hitsMax) >= 0.8) {
+                else if (this.creep.memory.task == 'repairing' && (target.hits / target.hitsMax) >= 0.8) {
                     this.creep.memory.task = '';
                 }
             }

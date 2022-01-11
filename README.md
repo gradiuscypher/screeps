@@ -1,7 +1,6 @@
 # gradius' screeps code - Typescript Edition!
 
 ## Current Work
-* tower filling screeps
 * more advanced creep bodies
 * transport creeps
 
@@ -10,6 +9,9 @@
 * source finder function should use distance too
 * need a better way for miners to track their location rather than just staggered TTLs, need miners to claim a spot and keep it (global memory?)
 * roads
+* walls and rampart automation
+* military screeps
+* advanced tower logic
 
 ## Ideal Pool
 * miners are overmining, need to either clean up resources or reduce mining ability
