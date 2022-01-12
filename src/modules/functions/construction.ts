@@ -114,8 +114,16 @@ export class Construction {
 
     }
 
-    private build_road() {
-
+    public road_checker(room: Room, creep: Creep) {
+        // every time a screep walks over an unroaded area, it increments a counter
+        // a system checks the counters every x ticks and determines if it's over a threshold, if so, build it, otherwise reset counter
+        let current_look = room.lookForAt(LOOK_STRUCTURES, creep.pos);
+        let roads = _.filter(current_look, (structure) => {
+            return structure.structureType == STRUCTURE_ROAD
+        });
+        if (!roads.length) {
+            console.log(`There's no road here: ${creep.pos}`);
+        }
     }
 
     private build_tower(room: Room) {

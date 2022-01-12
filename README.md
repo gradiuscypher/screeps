@@ -1,6 +1,7 @@
 # gradius' screeps code - Typescript Edition!
 
 ## Current Work
+* roads
 * more advanced creep bodies
 * transport creeps
 
@@ -8,7 +9,6 @@
 * tag a building to make sure it doesn't decay, rather than repairing decay
 * better source finder for all creeps, need to make sure the storage is being used, should also consider distance
 * need a better way for miners to track their location rather than just staggered TTLs, need miners to claim a spot and keep it (global memory?)
-* roads
 * walls and rampart automation
 * military screeps
 * advanced tower logic
