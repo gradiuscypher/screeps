@@ -1,9 +1,11 @@
 # gradius' screeps code - Typescript Edition!
 
 ## Current Work
+* clean up old roads so they don't clutter everything
 * roads
 * more advanced creep bodies
 * transport creeps
+* need a way to disable/enable creeps pathing lines and messages for clean debug
 
 ## Next Up
 * tag a building to make sure it doesn't decay, rather than repairing decay

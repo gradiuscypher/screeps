@@ -2,11 +2,14 @@ import { HelperFunctions } from "utils/HelperFunctions"
 
 let helper = new HelperFunctions();
 
+const ROAD_CHECK_TIMER = 60;
+
 export class Construction {
     public run_manager(room: Room) {
         this.build_extension(room);
         this.build_mining_containers(room);
         this.build_tower(room);
+        // this.build_roads(room);
     }
     private build_mining_containers(room: Room) {
         let surrounding_points = [
@@ -114,15 +117,17 @@ export class Construction {
 
     }
 
-    public road_checker(room: Room, creep: Creep) {
-        // every time a screep walks over an unroaded area, it increments a counter
-        // a system checks the counters every x ticks and determines if it's over a threshold, if so, build it, otherwise reset counter
-        let current_look = room.lookForAt(LOOK_STRUCTURES, creep.pos);
-        let roads = _.filter(current_look, (structure) => {
-            return structure.structureType == STRUCTURE_ROAD
+    public build_roads(room: Room) {
+        // find every useful site that roads should be between and pathfind between them
+        let spawn = room.find(FIND_MY_SPAWNS)[0];
+        let all_structures = room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType != STRUCTURE_EXTENSION && structure.structureType != STRUCTURE_ROAD)
+            }
         });
-        if (!roads.length) {
-            console.log(`There's no road here: ${creep.pos}`);
+        for (const structure of all_structures) {
+            let path = PathFinder.search(spawn.pos, structure.pos).path;
+            room.visual.poly(path, { stroke: "#a2dd4", lineStyle: 'dashed' });
         }
     }
 

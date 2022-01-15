@@ -29,7 +29,6 @@ declare global {
     interface Memory {
         uuid: number;
         log: any;
-        roads: number[][];
     }
 
     interface CreepMemory {
@@ -47,15 +46,6 @@ declare global {
     }
 }
 
-Memory.roads = []
-
-for (let i: number = 0; i < 50; i++) {
-    Memory.roads[i] = [];
-    for (let j: number = 0; j < 50; j++) {
-        Memory.roads[i][j] = 0;
-    }
-}
-
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
@@ -65,8 +55,6 @@ export const loop = ErrorMapper.wrapLoop(() => {
             delete Memory.creeps[name];
         }
     }
-
-    // console.log(`MemRoads: ${Memory.roads[0]}`)
 
     // TODO: this is very single room centric, need to adjust this later
     let troom = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;
@@ -85,9 +73,6 @@ export const loop = ErrorMapper.wrapLoop(() => {
     // iterate through every creep and give it a job
     for (const name in Game.creeps) {
         let target_creep: Creep = Game.creeps[name];
-
-        // check the roads
-        // construction_manager.road_checker(troom, target_creep);
 
         // do role things
         switch (target_creep.memory.role) {
