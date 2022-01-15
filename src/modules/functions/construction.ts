@@ -9,7 +9,7 @@ export class Construction {
         this.build_extension(room);
         this.build_mining_containers(room);
         this.build_tower(room);
-        // this.build_roads(room);
+        // this.build_roads(room, false);
     }
     private build_mining_containers(room: Room) {
         let surrounding_points = [
@@ -117,7 +117,18 @@ export class Construction {
 
     }
 
-    public build_roads(room: Room) {
+    public build_roads(room: Room, plan = true) {
+        let roads = room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_ROAD;
+            }
+        });
+        let road_construction = room.find(FIND_CONSTRUCTION_SITES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_ROAD;
+            }
+        });
+
         // find every useful site that roads should be between and pathfind between them
         let spawn = room.find(FIND_MY_SPAWNS)[0];
         let all_structures = room.find(FIND_STRUCTURES, {
@@ -126,8 +137,32 @@ export class Construction {
             }
         });
         for (const structure of all_structures) {
-            let path = PathFinder.search(spawn.pos, structure.pos).path;
-            room.visual.poly(path, { stroke: "#a2dd4", lineStyle: 'dashed' });
+            let path = PathFinder.search(spawn.pos, { pos: structure.pos, range: 1 }, {
+                roomCallback: room_name => {
+                    let room = Game.rooms[room_name];
+                    if (!room) return false;
+                    let costs = new PathFinder.CostMatrix;
+
+                    for (const structure of room.find(FIND_STRUCTURES)) {
+                        if (structure.structureType === STRUCTURE_ROAD) {
+                            costs.set(structure.pos.x, structure.pos.y, 1);
+                        }
+                        else if (structure.structureType !== STRUCTURE_CONTAINER && structure.structureType !== STRUCTURE_RAMPART) {
+                            costs.set(structure.pos.x, structure.pos.y, 0xff);
+                        }
+                    }
+                    return costs;
+                }
+            }).path;
+
+            if (plan) {
+                room.visual.poly(path, { stroke: "#ff8400", lineStyle: 'dashed' });
+            }
+            else {
+                for (const point of path) {
+                    room.createConstructionSite(point, STRUCTURE_ROAD);
+                }
+            }
         }
     }
 

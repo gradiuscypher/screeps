@@ -8,12 +8,14 @@ import { Construction } from "modules/functions/construction";
 import { Summary } from "modules/functions/summary";
 import { HelperFunctions } from "utils/HelperFunctions"
 import { TowerController } from "modules/functions/tower";
+import { ToolScripts } from "utils/ToolScripts";
 
 let spawn_manager = new Spawner;
 let construction_manager = new Construction();
 let summary_manager = new Summary();
 let helper = new HelperFunctions();
 let tower_controller = new TowerController();
+let tool_scripts = new ToolScripts;
 
 
 declare global {
@@ -55,6 +57,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
             delete Memory.creeps[name];
         }
     }
+
 
     // TODO: this is very single room centric, need to adjust this later
     let troom = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;
