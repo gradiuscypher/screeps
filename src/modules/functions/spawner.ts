@@ -2,7 +2,7 @@ export class Spawner {
     public check_spawns() {
         // max role settings
         const MAX_BUILDERS = 2;
-        const MAX_HARVESTERS = 8;
+        const MAX_HARVESTERS = 4;
         const MAX_UPGRADERS = 1;
         const MAX_MINERS = 2;
         const REQ_ENERGY = 200;
@@ -23,21 +23,28 @@ export class Spawner {
         let room = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;
 
         // compare the role counts to the current screeps and adjust as needed
-        if (room.energyAvailable >= REQ_ENERGY) {
-            let timestamp = Game.time.toString();
+        let timestamp = Game.time.toString();
+        if (room.energyAvailable >= room.energyCapacityAvailable / 2) {
 
             if (harvesters.length < MAX_HARVESTERS) {
-                Game.spawns['Spawn1'].spawnCreep(HARVESTER_BP, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '' } });
+                let body = this.generate_blueprint('worker', room.energyCapacityAvailable);
+                let result = Game.spawns['Spawn1'].spawnCreep(body, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '' } });
             }
             else if (builders.length < MAX_BUILDERS) {
-                Game.spawns['Spawn1'].spawnCreep(BUILDER_BP, 'b' + timestamp, { memory: { role: 'builder', room: room.name, working: false, task: '' } });
+                let body = this.generate_blueprint('worker', room.energyCapacityAvailable);
+                Game.spawns['Spawn1'].spawnCreep(body, 'b' + timestamp, { memory: { role: 'builder', room: room.name, working: false, task: '' } });
             }
             else if (upgraders.length < MAX_UPGRADERS) {
-                Game.spawns['Spawn1'].spawnCreep(UPGRADER_BP, 'u' + timestamp, { memory: { role: 'upgrader', room: room.name, working: false, task: '' } });
+                let body = this.generate_blueprint('worker', room.energyCapacityAvailable);
+                Game.spawns['Spawn1'].spawnCreep(body, 'u' + timestamp, { memory: { role: 'upgrader', room: room.name, working: false, task: '' } });
             }
-            else if (miners.length < MAX_MINERS && room.energyAvailable >= 500) {
-                Game.spawns['Spawn1'].spawnCreep(MINER_BP, 'm' + timestamp, { memory: { role: 'miner', room: room.name, working: false, task: '' } });
+            else if (miners.length < MAX_MINERS) {
+                let body = this.generate_blueprint('miner', room.energyCapacityAvailable);
+                Game.spawns['Spawn1'].spawnCreep(body, 'm' + timestamp, { memory: { role: 'miner', room: room.name, working: false, task: '' } });
             }
+        }
+        else if (room.energyAvailable >= REQ_ENERGY && Object.keys(Game.creeps).length <= 0) {
+            Game.spawns['Spawn1'].spawnCreep(HARVESTER_BP, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '' } });
         }
     }
 
@@ -45,26 +52,32 @@ export class Spawner {
      * Generates a blueprint for creep's body based on parameters
      *
      * @private
-     * @param {string} role - what role are we generating
-     * @param {number} available_energy - how much energy is available to spawn
-     * @param {boolean} roads - does the base have roads
+     * @param role - what role are we generating
+     * @param available_energy - how much energy is available to spawn
+     * @param roads - does the base have roads
      * @memberof Spawner
      */
-    private generate_blueprint(role: string, available_energy: number, roads = true) {
+    public generate_blueprint(role: string, available_energy: number, roads = true) {
+        let part_count = Math.floor(Math.floor(available_energy / 200) / 3);
+        let creep_body: BodyPartConstant[] = [];
+
         switch (role) {
             case 'worker':
                 // generic worker to repair, upgrade, etc
-                // m = ((w+c)/2)
-                // w*100 + c*50 + ((w+c)/2)*50 = 2000
-                // 100w + 50c +
-                let work_parts = [WORK, CARRY];
-                let move_parts = [MOVE];
-
-                break;
+                creep_body.push(...Array(part_count).fill(WORK));
+                creep_body.push(...Array(part_count).fill(CARRY));
+                creep_body.push(...Array(part_count).fill(MOVE));
+                return creep_body;
             case 'miner':
-                break;
+                creep_body.push(...Array(part_count * 2).fill(WORK));
+                creep_body.push(...Array(part_count).fill(MOVE));
+                return creep_body;
             case 'transport':
-                break;
+                creep_body.push(...Array(part_count * 2).fill(CARRY));
+                creep_body.push(...Array(part_count).fill(MOVE));
+                return creep_body;
         }
+
+        return [WORK, MOVE, CARRY];
     }
 }

@@ -1,7 +1,6 @@
 # gradius' screeps code - Typescript Edition!
 
 ## Current Work
-* more advanced creep bodies
 * transport creeps
 
 ## Next Up

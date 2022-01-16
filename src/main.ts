@@ -48,6 +48,7 @@ declare global {
     }
 }
 
+
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
@@ -61,6 +62,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
     // TODO: this is very single room centric, need to adjust this later
     let troom = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;
+    // spawn_manager.generate_blueprint('worker', troom.energyAvailable);
 
     // room summary every 5 ticks
     summary_manager.room_summary(troom);
