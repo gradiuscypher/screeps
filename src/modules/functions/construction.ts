@@ -10,6 +10,7 @@ export class Construction {
         this.build_mining_containers(room);
         this.build_tower(room);
         // this.build_roads(room, false);
+        // this.build_extension_roads(room);
     }
     private build_mining_containers(room: Room) {
         let surrounding_points = [
@@ -207,5 +208,48 @@ export class Construction {
                 room.createConstructionSite(new_point[0], new_point[1], STRUCTURE_TOWER);
             }
         }
+    }
+
+    private build_extension_roads(room: Room) {
+        let extensions = room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_EXTENSION;
+            }
+        });
+
+        for (const extension of extensions) {
+            let close_extensions = extension.pos.findInRange(FIND_STRUCTURES, 2, {
+                filter: (structure) => {
+                    return structure.structureType == STRUCTURE_EXTENSION;
+                }
+            });
+
+            for (const ce of close_extensions) {
+                let path = PathFinder.search(extension.pos, { pos: ce.pos, range: 0 }, {
+                    roomCallback: room_name => {
+                        let room = Game.rooms[room_name];
+                        if (!room) return false;
+                        let costs = new PathFinder.CostMatrix;
+
+                        for (const structure of room.find(FIND_STRUCTURES)) {
+                            if (structure.structureType === STRUCTURE_ROAD || structure.structureType === STRUCTURE_EXTENSION) {
+                                costs.set(structure.pos.x, structure.pos.y, 1);
+                            }
+                            else if (structure.structureType !== STRUCTURE_CONTAINER && structure.structureType !== STRUCTURE_RAMPART) {
+                                costs.set(structure.pos.x, structure.pos.y, 0xff);
+                            }
+                        }
+                        return costs;
+                    }
+                }).path;
+                // TODO: need to check if there's an extension here, otherwise we put roads under extensions
+                if (path.length) {
+                    room.createConstructionSite(path[0].x, path[0].y, STRUCTURE_ROAD);
+                    // room.visual.circle(path[0].x, path[0].y, { fill: '#ff8400' })
+                }
+            }
+
+        }
+
     }
 }

@@ -10,4 +10,23 @@ export class ToolScripts {
             road.destroy();
         }
     }
+
+    public remove_unreachable_roads(room: Room) {
+        let extensions = room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_EXTENSION;
+            }
+        });
+
+        for (const extension of extensions) {
+            let room_pos = room.lookAt(extension.pos);
+
+            for (const pos of room_pos) {
+                if (pos.constructionSite?.structureType == STRUCTURE_ROAD) {
+                    pos.constructionSite.remove();
+                }
+            }
+
+        }
+    }
 }
