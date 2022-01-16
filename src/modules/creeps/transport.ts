@@ -2,25 +2,20 @@ import { HelperFunctions } from "utils/HelperFunctions"
 
 let helper = new HelperFunctions();
 
-export class Harvester {
+export class Transport {
     private creep: Creep;
 
     constructor(target_creep: Creep) {
         this.creep = target_creep;
     }
 
-    public harvest() {
+    public primary() {
         if (this.creep.store.getUsedCapacity() === 0) {
+            // TODO: this will still give the creep sources, even though it wont have the parts for harvesting
             let source = helper.find_energy_source(this.creep.room, true);
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
-                }
-            }
-
-            else {
-                if (source && this.creep.harvest(source) == ERR_NOT_IN_RANGE) {
                     this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
                 }
             }

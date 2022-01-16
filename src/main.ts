@@ -1,6 +1,7 @@
 import { ErrorMapper } from "utils/ErrorMapper";
 import { Spawner } from "modules/functions/spawner";
 import { Harvester } from "modules/creeps/harvester";
+import { Transport } from "modules/creeps/transport";
 import { Miner } from "modules/creeps/miner";
 import { Upgrader } from "modules/creeps/upgrader";
 import { Builder } from "modules/creeps/builder";
@@ -84,6 +85,10 @@ export const loop = ErrorMapper.wrapLoop(() => {
             case 'harvester':
                 let harvester = new Harvester(target_creep);
                 harvester.harvest();
+                break;
+            case 'transport':
+                let transport = new Transport(target_creep);
+                transport.primary();
                 break;
             case 'upgrader':
                 let upgrader = new Upgrader(target_creep);
