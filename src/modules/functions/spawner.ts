@@ -1,8 +1,8 @@
 export class Spawner {
     public check_spawns() {
         // max role settings
-        const MAX_BUILDERS = 5;
-        const MAX_HARVESTERS = 5;
+        const MAX_BUILDERS = 2;
+        const MAX_HARVESTERS = 8;
         const MAX_UPGRADERS = 1;
         const MAX_MINERS = 2;
         const REQ_ENERGY = 200;
@@ -38,6 +38,33 @@ export class Spawner {
             else if (miners.length < MAX_MINERS && room.energyAvailable >= 500) {
                 Game.spawns['Spawn1'].spawnCreep(MINER_BP, 'm' + timestamp, { memory: { role: 'miner', room: room.name, working: false, task: '' } });
             }
+        }
+    }
+
+    /**
+     * Generates a blueprint for creep's body based on parameters
+     *
+     * @private
+     * @param {string} role - what role are we generating
+     * @param {number} available_energy - how much energy is available to spawn
+     * @param {boolean} roads - does the base have roads
+     * @memberof Spawner
+     */
+    private generate_blueprint(role: string, available_energy: number, roads = true) {
+        switch (role) {
+            case 'worker':
+                // generic worker to repair, upgrade, etc
+                // m = ((w+c)/2)
+                // w*100 + c*50 + ((w+c)/2)*50 = 2000
+                // 100w + 50c +
+                let work_parts = [WORK, CARRY];
+                let move_parts = [MOVE];
+
+                break;
+            case 'miner':
+                break;
+            case 'transport':
+                break;
         }
     }
 }
