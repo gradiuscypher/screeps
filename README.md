@@ -9,6 +9,7 @@
             * energy in/out
             * resources in/out
             * creep time spent idle
+            * hauling large energy sources to upgrade RCL quickly
     * Room manager keeps track of room level details and needs
         * iterates over creeps and runs jobs
         * need more creeps to keep up on energy tasks (transportation, mining)
@@ -17,6 +18,7 @@
 # Tasks
 ## Current Work
 * creep refactor - more flexible creeps with more generic systems
+* need to validate that current creep spawning code works well for low energy rooms
 
 ## Next Up
 * better repair logic - tag a building to make sure it doesn't decay, rather than repairing decay
@@ -26,6 +28,7 @@
 * Multi-room expansion
 
 ## Ideal Pool
+* large hauling creeps for moving between rooms for RCL powerleveling
 * additional containers
 * link implementation
 * lab implementation
@@ -43,6 +46,7 @@
 * turning on the road building task when a new structure is built, when extensions are built
 * better pathfinding? keep creeps from blocking each other?
 * logging to some sort of log store for review
+* manual military actions via flags for PvP fun
 
 ## Complete/Abandoned
 * roads
