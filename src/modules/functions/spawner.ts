@@ -3,9 +3,9 @@ export class Spawner {
         // max role settings
         const MAX_BUILDERS = 2;
         const MAX_HARVESTERS = 1;
-        const MAX_UPGRADERS = 1;
+        const MAX_UPGRADERS = 4;
         const MAX_MINERS = 2;
-        const MAX_TRANSPORT = 4;
+        const MAX_TRANSPORT = 3;
         const REQ_ENERGY = 200;
 
         // role blueprints

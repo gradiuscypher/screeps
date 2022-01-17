@@ -28,6 +28,7 @@
 * Multi-room expansion
 
 ## Ideal Pool
+* pathing from storage to destinations to also create roads that way
 * large hauling creeps for moving between rooms for RCL powerleveling
 * additional containers
 * link implementation
