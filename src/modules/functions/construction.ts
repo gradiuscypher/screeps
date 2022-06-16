@@ -74,7 +74,12 @@ export class Construction {
             * if there is no free one, iterate through each of the diagonals and check their diagonals till you find a free space
         */
         let room_level = (room.controller == undefined) ? 0 : room.controller.level;
+
         let total_extension_count = (Math.max(0, (room_level - 2)) * 5) * 2;
+        if (room_level == 2) {
+            total_extension_count = 5;
+        }
+
         let current_extension_count = room.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_EXTENSION } }).length;
         let current_construction_count = room.find(FIND_CONSTRUCTION_SITES, { filter: (site) => { return site.structureType == STRUCTURE_EXTENSION } }).length;
 

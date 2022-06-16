@@ -15,13 +15,20 @@
         * need more creeps to keep up on energy tasks (transportation, mining)
         * need more creeps for protection
 
+# Bug List
+## Confirmed
+## Unconfirmed
+* If a creep is on a construction spot, it can't be worked on
+  * logic in our constructor to move to a different spot if it cant reach one it's been trying
+
 # Tasks
 ## Current Work
-* TODO: spawner to calculate max role count
+* need logic to store energy pickup destination in memory
+* need to validate that current creep spawning code works well for low energy rooms
 * BUG: find energy source seems broken
 * TODO:  starting from 0 creeps is not great ATM
 * creep refactor - more flexible creeps with more generic systems
-* need to validate that current creep spawning code works well for low energy rooms
+* TODO: spawner to calculate max role count
 
 ## Next Up
 * better repair logic - tag a building to make sure it doesn't decay, rather than repairing decay
@@ -29,8 +36,11 @@
 * walls and rampart automation
 * military screeps
 * Multi-room expansion
+* detailed logs to keep track of whats going on, can store in DD
 
-## Ideal Pool
+## Idea Pool
+* need priority on buildings: eg creeps are reparing containers before building extensions -extensions more important
+* Tracking of tasks to try a different task when it's unable to do a task for a certain period of time, prevent deadlock
 * pathing from storage to destinations to also create roads that way
 * large hauling creeps for moving between rooms for RCL powerleveling
 * additional containers

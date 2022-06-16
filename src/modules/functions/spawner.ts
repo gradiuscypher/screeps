@@ -1,11 +1,11 @@
 export class Spawner {
     public check_spawns() {
         // max role settings
-        const MAX_BUILDERS = 2;
-        const MAX_HARVESTERS = 4;
-        const MAX_UPGRADERS = 2;
-        const MAX_MINERS = 1;
-        const MAX_TRANSPORT = 0;
+        const MAX_BUILDERS = 4;
+        const MAX_HARVESTERS = 0;
+        const MAX_UPGRADERS = 1;
+        const MAX_MINERS = 2;
+        const MAX_TRANSPORT = 2;
         const REQ_ENERGY = 200;
 
         // role blueprints
@@ -23,10 +23,16 @@ export class Spawner {
         let miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
         let transports = _.filter(Game.creeps, (creep) => creep.memory.role == 'transport');
         let room = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;
-
-        // compare the role counts to the current screeps and adjust as needed
         let timestamp = Game.time.toString();
-        if (room.energyAvailable >= room.energyCapacityAvailable / 3) {
+
+        // if nothing else can spawn and we have no creeps, we need simple harvesters
+        if (room.energyAvailable >= REQ_ENERGY && Object.keys(Game.creeps).length <= 2) {
+            Game.spawns['Spawn1'].spawnCreep(HARVESTER_BP, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '' } });
+        }
+
+        // otherwise, spawn regular roles
+        // compare the role counts to the current screeps and adjust as needed
+        else if (room.energyAvailable >= room.energyCapacityAvailable / 3) {
             if (harvesters.length < MAX_HARVESTERS) {
                 let body = this.generate_blueprint('worker', room.energyCapacityAvailable);
                 let result = Game.spawns['Spawn1'].spawnCreep(body, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '' } });
@@ -48,9 +54,7 @@ export class Spawner {
                 Game.spawns['Spawn1'].spawnCreep(body, 'u' + timestamp, { memory: { role: 'upgrader', room: room.name, working: false, task: '' } });
             }
         }
-        else if (room.energyAvailable >= REQ_ENERGY && Object.keys(Game.creeps).length <= 2) {
-            Game.spawns['Spawn1'].spawnCreep(HARVESTER_BP, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '' } });
-        }
+
     }
 
     /**

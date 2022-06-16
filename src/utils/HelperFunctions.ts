@@ -48,12 +48,13 @@ export class HelperFunctions {
             container.store.getUsedCapacity()
         }
         if (containers.length) {
-            return containers.reduce((prevCon, currCon) => prevCon = prevCon.store.getUsedCapacity() > currCon.store.getUsedCapacity() ? prevCon : currCon);
+            return containers.reduce((prevCon, currCon) => prevCon = prevCon.store.getUsedCapacity() > currCon.store.getUsedCapacity() * 1.2 ? prevCon : currCon);
         }
 
         // are there any sources?
         let sources = room.find(FIND_SOURCES);
         if (sources.length) {
+            // BUG: Source is hardcoded ATM
             return room.find(FIND_SOURCES)[1];
             // return sources.reduce((prevSource, currSource) => prevSource = prevSource.energy > currSource.energy ? prevSource : currSource);
         }

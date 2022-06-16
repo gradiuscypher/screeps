@@ -2,6 +2,9 @@ import { HelperFunctions } from "utils/HelperFunctions"
 
 let helper = new HelperFunctions();
 
+const REPAIR_PERCENT_MIN = 0.2;
+const REPAIR_PERCENT_MAX = 0.4;
+
 export class Builder {
     private creep: Creep;
 
@@ -56,16 +59,16 @@ export class Builder {
             // repair logic
             let repair_targets = this.creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return ((structure.hits / structure.hitsMax) < 0.8);
+                    return ((structure.hits / structure.hitsMax) < REPAIR_PERCENT_MAX);
                 }
             });
             // console.log(`repairtargets: ${repair_targets}`);
 
             for (let target of repair_targets) {
-                if ((target.hits / target.hitsMax) < 0.4) {
+                if ((target.hits / target.hitsMax) < REPAIR_PERCENT_MIN) {
                     this.creep.memory.task = 'repairing';
                 }
-                else if (this.creep.memory.task == 'repairing' && (target.hits / target.hitsMax) >= 0.8) {
+                else if (this.creep.memory.task == 'repairing' && (target.hits / target.hitsMax) >= REPAIR_PERCENT_MAX) {
                     this.creep.memory.task = '';
                 }
             }
