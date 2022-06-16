@@ -17,7 +17,8 @@
 
 # Tasks
 ## Current Work
-* BUG: find energy source?
+* TODO: spawner to calculate max role count
+* BUG: find energy source seems broken
 * TODO:  starting from 0 creeps is not great ATM
 * creep refactor - more flexible creeps with more generic systems
 * need to validate that current creep spawning code works well for low energy rooms
