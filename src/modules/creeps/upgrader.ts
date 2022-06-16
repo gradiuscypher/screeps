@@ -25,7 +25,9 @@ export class Upgrader {
             }
         }
         else {
-            let source = helper.find_energy_source(this.creep.room);
+            // TODO: actually use find_energy_source when not broken
+            // let source = helper.find_energy_source(this.creep.room);
+            let source = this.creep.room.find(FIND_SOURCES)[1];
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

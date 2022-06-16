@@ -31,6 +31,7 @@ export class HelperFunctions {
     }
 
     public find_energy_source(room: Room, ignore_storage: boolean = false) {
+        // BUG: is there a bug in how energy sources are found and distributed? workers seem to cluster around one
         let MIN_ENERGY = 50;
         // are there a storage?
         if (!ignore_storage && room.storage && room.storage.store.energy > MIN_ENERGY) {
@@ -53,7 +54,8 @@ export class HelperFunctions {
         // are there any sources?
         let sources = room.find(FIND_SOURCES);
         if (sources.length) {
-            return sources.reduce((prevSource, currSource) => prevSource = prevSource.energy > currSource.energy ? prevSource : currSource);
+            return room.find(FIND_SOURCES)[1];
+            // return sources.reduce((prevSource, currSource) => prevSource = prevSource.energy > currSource.energy ? prevSource : currSource);
         }
 
         // didnt find anything return null

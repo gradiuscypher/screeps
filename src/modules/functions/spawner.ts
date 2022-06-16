@@ -1,11 +1,11 @@
 export class Spawner {
     public check_spawns() {
         // max role settings
-        const MAX_BUILDERS = 2;
+        const MAX_BUILDERS = 1;
         const MAX_HARVESTERS = 4;
-        const MAX_UPGRADERS = 4;
-        const MAX_MINERS = 2;
-        const MAX_TRANSPORT = 3;
+        const MAX_UPGRADERS = 2;
+        const MAX_MINERS = 1;
+        const MAX_TRANSPORT = 0;
         const REQ_ENERGY = 200;
 
         // role blueprints
@@ -26,8 +26,7 @@ export class Spawner {
 
         // compare the role counts to the current screeps and adjust as needed
         let timestamp = Game.time.toString();
-        if (room.energyAvailable >= room.energyCapacityAvailable / 2) {
-
+        if (room.energyAvailable >= room.energyCapacityAvailable / 3) {
             if (harvesters.length < MAX_HARVESTERS) {
                 let body = this.generate_blueprint('worker', room.energyCapacityAvailable);
                 let result = Game.spawns['Spawn1'].spawnCreep(body, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '' } });
@@ -64,7 +63,9 @@ export class Spawner {
      * @memberof Spawner
      */
     public generate_blueprint(role: string, available_energy: number, roads = true) {
-        let part_count = Math.floor(Math.floor(available_energy / 200) / 3);
+        // TODO: there's a bug here, I should be calculating the floor to get a min of 1
+        // let part_count = Math.floor(Math.floor(available_energy / 200) / 3);
+        let part_count = 1;
         let creep_body: BodyPartConstant[] = [];
 
         switch (role) {

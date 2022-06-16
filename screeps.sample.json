@@ -30,6 +30,15 @@
         "hostname": "1.2.3.4",
         "port": 21025,
         "path": "/",
+        "branch": "testing"
+    },
+    "pserver-prod": {
+        "email": "username",
+        "password": "password",
+        "protocol": "http",
+        "hostname": "1.2.3.4",
+        "port": 21025,
+        "path": "/",
         "branch": "main"
     }
 }
