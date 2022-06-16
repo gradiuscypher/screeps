@@ -60,7 +60,6 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
     }
 
-
     // TODO: this is very single room centric, need to adjust this later
     let troom = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;
     // spawn_manager.generate_blueprint('worker', troom.energyAvailable);

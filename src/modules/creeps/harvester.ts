@@ -11,7 +11,15 @@ export class Harvester {
 
     public harvest() {
         if (this.creep.store.getUsedCapacity() === 0) {
-            let source = helper.find_energy_source(this.creep.room, true);
+            this.creep.memory.task = 'harvesting';
+        }
+        if (this.creep.store.getUsedCapacity() === this.creep.store.getCapacity()) {
+            this.creep.memory.task = 'filling';
+        }
+
+        if (this.creep.memory.task == 'harvesting') {
+            // let source = helper.find_energy_source(this.creep.room, true);
+            let source = this.creep.room.find(FIND_SOURCES)[0];
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -26,7 +34,7 @@ export class Harvester {
             }
         }
 
-        else {
+        else if (this.creep.memory.task == 'filling') {
             let spawn_targets = this.creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_EXTENSION ||
