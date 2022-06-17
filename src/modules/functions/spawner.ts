@@ -27,7 +27,7 @@ export class Spawner {
 
         // if nothing else can spawn and we have no creeps, we need simple harvesters
         if (room.energyAvailable >= REQ_ENERGY && Object.keys(Game.creeps).length <= 2) {
-            Game.spawns['Spawn1'].spawnCreep(HARVESTER_BP, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '' } });
+            Game.spawns['Spawn1'].spawnCreep(HARVESTER_BP, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '', destination: '' } });
         }
 
         // otherwise, spawn regular roles
@@ -35,23 +35,23 @@ export class Spawner {
         else if (room.energyAvailable >= room.energyCapacityAvailable / 3) {
             if (harvesters.length < MAX_HARVESTERS) {
                 let body = this.generate_blueprint('worker', room.energyCapacityAvailable);
-                let result = Game.spawns['Spawn1'].spawnCreep(body, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '' } });
+                let result = Game.spawns['Spawn1'].spawnCreep(body, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '', destination: '' } });
             }
             else if (miners.length < MAX_MINERS) {
                 let body = this.generate_blueprint('miner', room.energyCapacityAvailable);
-                Game.spawns['Spawn1'].spawnCreep(body, 'm' + timestamp, { memory: { role: 'miner', room: room.name, working: false, task: '' } });
+                Game.spawns['Spawn1'].spawnCreep(body, 'm' + timestamp, { memory: { role: 'miner', room: room.name, working: false, task: '', destination: '' } });
             }
             if (transports.length < MAX_TRANSPORT) {
                 let body = this.generate_blueprint('transport', room.energyCapacityAvailable);
-                let result = Game.spawns['Spawn1'].spawnCreep(body, 't' + timestamp, { memory: { role: 'transport', room: room.name, working: false, task: '' } });
+                let result = Game.spawns['Spawn1'].spawnCreep(body, 't' + timestamp, { memory: { role: 'transport', room: room.name, working: false, task: '', destination: '' } });
             }
             else if (builders.length < MAX_BUILDERS) {
                 let body = this.generate_blueprint('worker', room.energyCapacityAvailable);
-                Game.spawns['Spawn1'].spawnCreep(body, 'b' + timestamp, { memory: { role: 'builder', room: room.name, working: false, task: '' } });
+                Game.spawns['Spawn1'].spawnCreep(body, 'b' + timestamp, { memory: { role: 'builder', room: room.name, working: false, task: '', destination: '' } });
             }
             else if (upgraders.length < MAX_UPGRADERS) {
                 let body = this.generate_blueprint('worker', room.energyCapacityAvailable);
-                Game.spawns['Spawn1'].spawnCreep(body, 'u' + timestamp, { memory: { role: 'upgrader', room: room.name, working: false, task: '' } });
+                Game.spawns['Spawn1'].spawnCreep(body, 'u' + timestamp, { memory: { role: 'upgrader', room: room.name, working: false, task: '', destination: '' } });
             }
         }
     }

@@ -23,6 +23,7 @@ export class Builder {
         // they're done getting energy, set working to true
         if (!this.creep.memory.working && this.creep.store.getFreeCapacity() == 0) {
             this.creep.memory.working = true;
+            this.creep.memory.destination = '';
             this.creep.say('Working...');
         }
 
@@ -91,16 +92,21 @@ export class Builder {
 
         // they're collecting energy
         else {
-            let source = helper.find_energy_source(this.creep.room);
+            console.log(`dest: ${this.creep.memory.destination}`);
+
+            let sourceId: Id<Source | StructureStorage> = this.creep.memory.destination as Id<Source | StructureStorage>;
+            let source = (!this.creep.memory.destination) ? helper.find_energy_source(this.creep.room) : Game.getObjectById(sourceId);
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    this.creep.memory.destination = source.id;
                     this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
                 }
             }
 
             else {
                 if (source && this.creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                    this.creep.memory.destination = source.id;
                     this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
                 }
             }

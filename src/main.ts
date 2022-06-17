@@ -43,7 +43,8 @@ declare global {
         role: string;
         room: string;
         working: boolean;
-        task: string;
+        task?: string;
+        destination: string;
     }
 
     // Syntax for adding proprties to `global` (ex "global.log")
