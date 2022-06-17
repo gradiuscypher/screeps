@@ -38,8 +38,6 @@ export class Builder {
             });
 
             for (let target of tower_targets) {
-                // console.log(`${target.store.getUsedCapacity(RESOURCE_ENERGY) / target.store.getCapacity(RESOURCE_ENERGY)}`);
-
                 if ((target.store.getUsedCapacity(RESOURCE_ENERGY) / target.store.getCapacity(RESOURCE_ENERGY)) < 0.8) {
                     this.creep.memory.task = 'filling';
                 }
@@ -63,7 +61,6 @@ export class Builder {
                     return ((structure.hits / structure.hitsMax) < REPAIR_PERCENT_MAX);
                 }
             });
-            // console.log(`repairtargets: ${repair_targets}`);
 
             for (let target of repair_targets) {
                 if ((target.hits / target.hitsMax) < REPAIR_PERCENT_MIN) {
@@ -92,22 +89,16 @@ export class Builder {
 
         // they're collecting energy
         else {
-            console.log(`dest: ${this.creep.memory.destination}`);
-
-            // let sourceId: Id<Source | StructureStorage> = this.creep.memory.destination as Id<Source | StructureStorage>;
-            // let source = (!this.creep.memory.destination) ? helper.find_energy_source(this.creep.room) : Game.getObjectById(sourceId);
-            let source = helper.find_energy_source(this.creep.room, false, this.creep.memory.destination);
+            let source = helper.find_energy_source(this.creep.room, false, this.creep);
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    this.creep.memory.destination = source.id;
                     this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
                 }
             }
 
             else {
                 if (source && this.creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                    this.creep.memory.destination = source.id;
                     this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
                 }
             }

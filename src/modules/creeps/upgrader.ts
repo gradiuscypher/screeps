@@ -26,20 +26,18 @@ export class Upgrader {
             }
         }
         else {
-            let source = helper.find_energy_source(this.creep.room, false, this.creep.memory.destination);
+            let source = helper.find_energy_source(this.creep.room, false, this.creep);
             // let source = this.creep.room.find(FIND_SOURCES)[1];
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
-                    this.creep.memory.destination = source.id;
                 }
             }
 
             else {
                 if (source && this.creep.harvest(source) == ERR_NOT_IN_RANGE) {
                     this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
-                    this.creep.memory.destination = source.id;
                 }
             }
         }

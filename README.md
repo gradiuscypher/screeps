@@ -7,9 +7,9 @@
 # Tasks
 ## Current Work
 * load balance find_energy_source
-* need logic to store energy pickup destination in memory
 * creep refactor - more flexible creeps with more generic systems
 * creep bodies are built for roads, need to build roads.
+* possible to modify constants from cli?
 
 ## Next Up
 * transports dont fill containers, only storage. this is because they're pulling from the mining containers. need a way of marking mining containers as something to avoid filling
@@ -46,13 +46,6 @@
 * better pathfinding? keep creeps from blocking each other?
 * logging to some sort of log store for review
 * manual military actions via flags for PvP fun
-
-## Complete/Abandoned
-* roads
-* roads for extensions
-* building roads between extensions programmatically
-* Repair/Upgrade role modified to fix structures and roads
-* More generic parts for screeps so that we can adapt to needs and not idle
 
 # Refactor Thoughts
 * Multi-tiered setup:

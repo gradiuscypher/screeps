@@ -30,19 +30,20 @@ export class HelperFunctions {
         }
     }
 
-    public find_energy_source(room: Room, ignore_storage: boolean = false, destination?: string): StructureStorage | StructureContainer | Source | null {
+    public find_energy_source(room: Room, ignore_storage: boolean = false, creep: Creep): StructureStorage | StructureContainer | Source | null {
         // BUG: is there a bug in how energy sources are found and distributed? workers seem to cluster around one
         // TODO: need a way to ignore mining locations
         let MIN_ENERGY = 50;
 
         // do you already have a destination, just return the object if you do
-        if (destination) {
-            let sourceId: Id<Source | StructureStorage> = destination as Id<Source | StructureStorage>;
+        if (creep.memory.destination) {
+            let sourceId: Id<Source | StructureStorage> = creep.memory.destination as Id<Source | StructureStorage>;
             return Game.getObjectById(sourceId);
         }
 
         // are there a storage?
         if (!ignore_storage && room.storage && room.storage.store.energy > MIN_ENERGY) {
+            creep.memory.destination = room.storage.id;
             return room.storage;
         }
 
@@ -56,14 +57,18 @@ export class HelperFunctions {
             container.store.getUsedCapacity()
         }
         if (containers.length) {
-            return containers.reduce((prevCon, currCon) => prevCon = prevCon.store.getUsedCapacity() > currCon.store.getUsedCapacity() * 1.2 ? prevCon : currCon);
+            let target = containers.reduce((prevCon, currCon) => prevCon = prevCon.store.getUsedCapacity() > currCon.store.getUsedCapacity() * 1.2 ? prevCon : currCon);
+            creep.memory.destination = target.id;
+            return target;
         }
 
         // are there any sources?
         let sources = room.find(FIND_SOURCES);
         if (sources.length) {
             // BUG: Source is hardcoded ATM
-            return room.find(FIND_SOURCES)[1];
+            let target = room.find(FIND_SOURCES)[1];
+            creep.memory.destination = target.id;
+            return target;
             // return sources.reduce((prevSource, currSource) => prevSource = prevSource.energy > currSource.energy ? prevSource : currSource);
         }
 
