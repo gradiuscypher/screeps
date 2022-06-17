@@ -94,8 +94,9 @@ export class Builder {
         else {
             console.log(`dest: ${this.creep.memory.destination}`);
 
-            let sourceId: Id<Source | StructureStorage> = this.creep.memory.destination as Id<Source | StructureStorage>;
-            let source = (!this.creep.memory.destination) ? helper.find_energy_source(this.creep.room) : Game.getObjectById(sourceId);
+            // let sourceId: Id<Source | StructureStorage> = this.creep.memory.destination as Id<Source | StructureStorage>;
+            // let source = (!this.creep.memory.destination) ? helper.find_energy_source(this.creep.room) : Game.getObjectById(sourceId);
+            let source = helper.find_energy_source(this.creep.room, false, this.creep.memory.destination);
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

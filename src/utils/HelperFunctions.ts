@@ -30,10 +30,17 @@ export class HelperFunctions {
         }
     }
 
-    public find_energy_source(room: Room, ignore_storage: boolean = false): StructureStorage | StructureContainer | Source | null {
+    public find_energy_source(room: Room, ignore_storage: boolean = false, destination?: string): StructureStorage | StructureContainer | Source | null {
         // BUG: is there a bug in how energy sources are found and distributed? workers seem to cluster around one
         // TODO: need a way to ignore mining locations
         let MIN_ENERGY = 50;
+
+        // do you already have a destination, just return the object if you do
+        if (destination) {
+            let sourceId: Id<Source | StructureStorage> = destination as Id<Source | StructureStorage>;
+            return Game.getObjectById(sourceId);
+        }
+
         // are there a storage?
         if (!ignore_storage && room.storage && room.storage.store.energy > MIN_ENERGY) {
             return room.storage;
