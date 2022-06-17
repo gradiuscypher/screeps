@@ -32,6 +32,7 @@ export class HelperFunctions {
 
     public find_energy_source(room: Room, ignore_storage: boolean = false) {
         // BUG: is there a bug in how energy sources are found and distributed? workers seem to cluster around one
+        // TODO: need a way to ignore mining locations
         let MIN_ENERGY = 50;
         // are there a storage?
         if (!ignore_storage && room.storage && room.storage.store.energy > MIN_ENERGY) {

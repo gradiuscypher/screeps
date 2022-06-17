@@ -3,7 +3,7 @@ export class Spawner {
         // max role settings
         const MAX_BUILDERS = 4;
         const MAX_HARVESTERS = 0;
-        const MAX_UPGRADERS = 1;
+        const MAX_UPGRADERS = 2;
         const MAX_MINERS = 2;
         const MAX_TRANSPORT = 2;
         const REQ_ENERGY = 200;
@@ -54,7 +54,6 @@ export class Spawner {
                 Game.spawns['Spawn1'].spawnCreep(body, 'u' + timestamp, { memory: { role: 'upgrader', room: room.name, working: false, task: '' } });
             }
         }
-
     }
 
     /**
@@ -67,9 +66,8 @@ export class Spawner {
      * @memberof Spawner
      */
     public generate_blueprint(role: string, available_energy: number, roads = true) {
-        // TODO: there's a bug here, I should be calculating the floor to get a min of 1
-        // let part_count = Math.floor(Math.floor(available_energy / 200) / 3);
-        let part_count = 1;
+        // TODO: need more granular control for more expensive parts
+        let part_count = Math.max(1, Math.floor((available_energy / 100) / 3));
         let creep_body: BodyPartConstant[] = [];
 
         switch (role) {

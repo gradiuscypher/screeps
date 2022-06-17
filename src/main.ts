@@ -32,6 +32,11 @@ declare global {
     interface Memory {
         uuid: number;
         log: any;
+        source: string;
+    }
+
+    interface SourceLocation {
+        last_job: string;
     }
 
     interface CreepMemory {
@@ -82,22 +87,27 @@ export const loop = ErrorMapper.wrapLoop(() => {
         // do role things
         switch (target_creep.memory.role) {
             case 'harvester':
+                Memory.source = target_creep.memory.role;
                 let harvester = new Harvester(target_creep);
                 harvester.harvest();
                 break;
             case 'transport':
+                Memory.source = target_creep.memory.role;
                 let transport = new Transport(target_creep);
                 transport.primary();
                 break;
             case 'upgrader':
+                Memory.source = target_creep.memory.role;
                 let upgrader = new Upgrader(target_creep);
                 upgrader.upgrade();
                 break;
             case 'builder':
+                Memory.source = target_creep.memory.role;
                 let builder = new Builder(target_creep);
                 builder.build();
                 break;
             case 'miner':
+                Memory.source = target_creep.memory.role;
                 let miner = new Miner(target_creep);
                 miner.primary_action();
                 break;
