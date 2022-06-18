@@ -41,7 +41,7 @@ export class HelperFunctions {
             return Game.getObjectById(sourceId);
         }
 
-        // are there a storage?
+        // is there a storage?
         if (!ignore_storage && room.storage && room.storage.store.energy > MIN_ENERGY) {
             creep.memory.destination = room.storage.id;
             return room.storage;
@@ -53,15 +53,23 @@ export class HelperFunctions {
                 return (structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > MIN_ENERGY)
             }
         });
+
         for (let container of containers) {
             container.store.getUsedCapacity()
         }
+
         if (containers.length) {
             let target = containers.reduce((prevCon, currCon) => prevCon = prevCon.store.getUsedCapacity() > currCon.store.getUsedCapacity() * 1.2 ? prevCon : currCon);
-            creep.memory.destination = target.id;
-            // let current_count = Memory.allocations.get(target.id) || 0;
-            // Memory.allocations.set(target.id, current_count++);
-            // console.log(`allocations: ${Memory.allocations}`);
+            // creep.memory.destination = target.id;
+
+            if (target.id in Memory.allocations) {
+                Memory.allocations[target.id]++;
+            }
+            else {
+                Memory.allocations[target.id] = 1;
+            }
+
+            console.log(`allocations: ${Memory.allocations[target.id]}`);
             return target;
         }
 

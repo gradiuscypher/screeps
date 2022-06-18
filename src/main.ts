@@ -33,7 +33,7 @@ declare global {
         uuid: number;
         log: any;
         source: string;
-        allocations: Map<string, number>;
+        allocations: Record<string, number>;
         initialized: boolean;
     }
 
@@ -70,9 +70,14 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
     // if (!Memory.initialized) {
     //     console.log("Initializing the game.");
-    //     Memory.allocations = new Map();
-    //     Memory.initialized = true;
+    //     Memory.allocations = {};
+    //     Memory.allocations["count"] = 1;
+    //     console.log(`count initial: ${Memory.allocations["count"]}`);
     // }
+
+    // Memory.allocations["count"]++;
+    // console.log(`count: ${Memory.allocations["count"]}`);
+
 
     // TODO: this is very single room centric, need to adjust this later
     let troom = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;

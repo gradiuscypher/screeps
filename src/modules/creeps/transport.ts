@@ -22,6 +22,7 @@ export class Transport {
         }
 
         else {
+            this.creep.memory.destination = '';
             let spawn_targets = this.creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_EXTENSION ||
