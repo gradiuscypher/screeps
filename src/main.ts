@@ -33,6 +33,8 @@ declare global {
         uuid: number;
         log: any;
         source: string;
+        allocations: Map<string, number>;
+        initialized: boolean;
     }
 
     interface SourceLocation {
@@ -65,6 +67,12 @@ export const loop = ErrorMapper.wrapLoop(() => {
             delete Memory.creeps[name];
         }
     }
+
+    // if (!Memory.initialized) {
+    //     console.log("Initializing the game.");
+    //     Memory.allocations = new Map();
+    //     Memory.initialized = true;
+    // }
 
     // TODO: this is very single room centric, need to adjust this later
     let troom = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;

@@ -59,6 +59,9 @@ export class HelperFunctions {
         if (containers.length) {
             let target = containers.reduce((prevCon, currCon) => prevCon = prevCon.store.getUsedCapacity() > currCon.store.getUsedCapacity() * 1.2 ? prevCon : currCon);
             creep.memory.destination = target.id;
+            // let current_count = Memory.allocations.get(target.id) || 0;
+            // Memory.allocations.set(target.id, current_count++);
+            // console.log(`allocations: ${Memory.allocations}`);
             return target;
         }
 

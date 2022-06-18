@@ -6,7 +6,9 @@
 
 # Tasks
 ## Current Work
+* emergency harvester spawning doesnt work cuz I still spawn other creeps which increases the overall creep count past 2
 * load balance find_energy_source
+* detailed logs to keep track of whats going on, can store in DD
 * creep refactor - more flexible creeps with more generic systems
 * creep bodies are built for roads, need to build roads.
 * possible to modify constants from cli?
@@ -19,7 +21,6 @@
 * walls and rampart automation
 * military screeps
 * Multi-room expansion
-* detailed logs to keep track of whats going on, can store in DD
 * need to validate that current creep spawning code works well for low energy rooms
 
 ## Idea Pool

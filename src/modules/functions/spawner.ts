@@ -2,8 +2,8 @@ export class Spawner {
     public check_spawns() {
         // max role settings
         const MAX_BUILDERS = 2;
-        const MAX_HARVESTERS = 0;
-        const MAX_UPGRADERS = 4;
+        const MAX_HARVESTERS = 2;
+        const MAX_UPGRADERS = 2;
         const MAX_MINERS = 2;
         const MAX_TRANSPORT = 2;
         const REQ_ENERGY = 200;
@@ -26,7 +26,9 @@ export class Spawner {
         let timestamp = Game.time.toString();
 
         // if nothing else can spawn and we have no creeps, we need simple harvesters
-        if (room.energyAvailable >= REQ_ENERGY && Object.keys(Game.creeps).length <= 2) {
+        // if (room.energyAvailable >= REQ_ENERGY && Object.keys(Game.creeps).length <= 2) {
+        // TODO: clean up hack to emergency spawn harvesters
+        if (room.energyAvailable >= REQ_ENERGY && harvesters.length < MAX_HARVESTERS) {
             Game.spawns['Spawn1'].spawnCreep(HARVESTER_BP, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '', destination: '' } });
         }
 
@@ -67,7 +69,7 @@ export class Spawner {
      */
     public generate_blueprint(role: string, available_energy: number, roads = true) {
         // TODO: need more granular control for more expensive parts
-        let part_count = Math.max(1, Math.floor((available_energy / 100) / 3));
+        let part_count = Math.max(1, Math.floor((available_energy / 200) / 3));
         let creep_body: BodyPartConstant[] = [];
 
         switch (role) {
