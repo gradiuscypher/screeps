@@ -12,17 +12,20 @@ export class Transport {
     public primary() {
         if (this.creep.store.getUsedCapacity() === 0) {
             // TODO: this will still give the creep sources, even though it wont have the parts for harvesting
-            let source = helper.find_energy_source(this.creep.room, true, this.creep);
+            let source = helper.find_energy_source(this.creep.room, this.creep, true);
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     this.creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
                 }
+                else {
+                    // we've got our energy, don't need this location
+                    helper.clear_source_allocation(this.creep);
+                }
             }
         }
 
         else {
-            this.creep.memory.destination = '';
             let spawn_targets = this.creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_EXTENSION ||

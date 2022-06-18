@@ -68,20 +68,18 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
     }
 
-    // if (!Memory.initialized) {
-    //     console.log("Initializing the game.");
-    //     Memory.allocations = {};
-    //     Memory.allocations["count"] = 1;
-    //     console.log(`count initial: ${Memory.allocations["count"]}`);
-    // }
-
-    // Memory.allocations["count"]++;
-    // console.log(`count: ${Memory.allocations["count"]}`);
 
 
     // TODO: this is very single room centric, need to adjust this later
     let troom = _.filter(Game.structures, (structure) => structure.structureType == STRUCTURE_CONTROLLER)[0].room;
     // spawn_manager.generate_blueprint('worker', troom.energyAvailable);
+
+    // helper function for running command flags
+    // BUG: this doesnt remove the flag :(
+    let room_flags = troom.find(FIND_FLAGS);
+    for (let flag in room_flags) {
+        helper.command_flag(room_flags[flag]);
+    }
 
     // room summary every 5 ticks
     summary_manager.room_summary(troom);

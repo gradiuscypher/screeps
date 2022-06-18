@@ -30,16 +30,46 @@ export class HelperFunctions {
         }
     }
 
-    public find_energy_source(room: Room, ignore_storage: boolean = false, creep: Creep): StructureStorage | StructureContainer | Source | null {
+    public command_flag(flag: Flag) {
+        switch (flag.name) {
+            case 'clear.alloc':
+                console.log("Running clear.alloc flag");
+                Memory.allocations = {};
+                flag.remove();
+                break;
+        }
+    }
+
+    public clear_source_allocation(creep: Creep) {
+        console.log(`${creep.name} running clear_source_allocation`);
+        if (creep.memory.destination in Memory.allocations) {
+            Memory.allocations[creep.memory.destination]--;
+            creep.memory.destination = '';
+        }
+        else {
+            Memory.allocations[creep.memory.destination] = 0;
+            creep.memory.destination = '';
+        }
+    }
+
+    public find_energy_source(room: Room, creep: Creep, ignore_storage: boolean = false, ignore_containers: boolean = false, ignore_sources: boolean = false): StructureStorage | StructureContainer | Source | null {
         // BUG: is there a bug in how energy sources are found and distributed? workers seem to cluster around one
         // TODO: need a way to ignore mining locations
         let MIN_ENERGY = 50;
+
+        console.log("===");
+        for (const target_id in Memory.allocations) {
+            console.log(`${target_id}: ${Memory.allocations[target_id]}`);
+        }
+        console.log("===");
 
         // do you already have a destination, just return the object if you do
         if (creep.memory.destination) {
             let sourceId: Id<Source | StructureStorage> = creep.memory.destination as Id<Source | StructureStorage>;
             return Game.getObjectById(sourceId);
         }
+
+        console.log(`${creep.name} running find_energy_source for new destination`);
 
         // is there a storage?
         if (!ignore_storage && room.storage && room.storage.store.energy > MIN_ENERGY) {
@@ -48,39 +78,56 @@ export class HelperFunctions {
         }
 
         // are there any containers?
-        let containers: StructureContainer[] = room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > MIN_ENERGY)
-            }
-        });
+        if (!ignore_containers) {
+            let containers: StructureContainer[] = room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > MIN_ENERGY)
+                }
+            });
 
-        for (let container of containers) {
-            container.store.getUsedCapacity()
-        }
-
-        if (containers.length) {
-            let target = containers.reduce((prevCon, currCon) => prevCon = prevCon.store.getUsedCapacity() > currCon.store.getUsedCapacity() * 1.2 ? prevCon : currCon);
-            // creep.memory.destination = target.id;
-
-            if (target.id in Memory.allocations) {
-                Memory.allocations[target.id]++;
-            }
-            else {
-                Memory.allocations[target.id] = 1;
+            for (let container of containers) {
+                if (container.id! in Memory.allocations) {
+                    Memory.allocations[container.id] = 0;
+                }
             }
 
-            console.log(`allocations: ${Memory.allocations[target.id]}`);
-            return target;
+            if (containers.length) {
+                // assign the container with the least amount of allocations
+                let target = containers.reduce((prevCon, currCon) => prevCon = Memory.allocations[prevCon.id] < Memory.allocations[currCon.id] ? prevCon : currCon);
+
+                if (target.id in Memory.allocations) {
+                    Memory.allocations[target.id]++;
+                }
+                else {
+                    Memory.allocations[target.id] = 1;
+                }
+
+                creep.memory.destination = target.id;
+                return target;
+            }
         }
 
         // are there any sources?
-        let sources = room.find(FIND_SOURCES);
-        if (sources.length) {
-            // BUG: Source is hardcoded ATM
-            let target = room.find(FIND_SOURCES)[1];
-            creep.memory.destination = target.id;
-            return target;
-            // return sources.reduce((prevSource, currSource) => prevSource = prevSource.energy > currSource.energy ? prevSource : currSource);
+        if (!ignore_sources) {
+            console.log("We're looking at sources now");
+            // let sources = room.find(FIND_SOURCES);
+            let sources = room.find(FIND_SOURCES, {
+                filter: (raw_source) => {
+                    return (raw_source.energy >= MIN_ENERGY)
+                }
+            });
+
+            for (let source of sources) {
+                if (source.id! in Memory.allocations) {
+                    Memory.allocations[source.id] = 0;
+                }
+            }
+
+            if (sources.length) {
+                let target = sources.reduce((prevCon, currCon) => prevCon = Memory.allocations[prevCon.id] < Memory.allocations[currCon.id] ? prevCon : currCon);
+                creep.memory.destination = target.id;
+                return target;
+            }
         }
 
         // didnt find anything return null

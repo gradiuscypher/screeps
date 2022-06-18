@@ -18,8 +18,7 @@ export class Harvester {
         }
 
         if (this.creep.memory.task == 'harvesting') {
-            // let source = helper.find_energy_source(this.creep.room, true);
-            let source = this.creep.room.find(FIND_SOURCES)[0];
+            let source = helper.find_energy_source(this.creep.room, this.creep, true, true);
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -55,11 +54,17 @@ export class Harvester {
                 if (this.creep.transfer(spawn_targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     this.creep.moveTo(spawn_targets[0], { visualizePathStyle: { stroke: '#ffffff' } })
                 }
+                else {
+                    helper.clear_source_allocation(this.creep);
+                }
             }
 
             else if (fill_targets.length > 0) {
                 if (this.creep.transfer(fill_targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     this.creep.moveTo(fill_targets[0], { visualizePathStyle: { stroke: '#ffffff' } })
+                }
+                else {
+                    helper.clear_source_allocation(this.creep);
                 }
             }
         }

@@ -23,7 +23,7 @@ export class Builder {
         // they're done getting energy, set working to true
         if (!this.creep.memory.working && this.creep.store.getFreeCapacity() == 0) {
             this.creep.memory.working = true;
-            this.creep.memory.destination = '';
+            helper.clear_source_allocation(this.creep);
             this.creep.say('Working...');
         }
 
@@ -89,7 +89,7 @@ export class Builder {
 
         // they're collecting energy
         else {
-            let source = helper.find_energy_source(this.creep.room, false, this.creep);
+            let source = helper.find_energy_source(this.creep.room, this.creep);
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
