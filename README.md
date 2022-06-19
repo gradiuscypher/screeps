@@ -3,10 +3,10 @@
 # Bug List
 * If a creep is on a construction spot, it can't be worked on
   * logic in our constructor to move to a different spot if it cant reach one it's been trying
-* transporters get stuck with destination and wont do anything
 
 # Tasks
 ## Current Work
+* as transport keeps growing in parts, their min pickup goes up too high and they wont ever go get energy
 * something is making the allocation calc go negative still
 * harvesters should clean up energy on the ground
 * emergency harvester spawning doesnt work cuz I still spawn other creeps which increases the overall creep count past 2
@@ -26,6 +26,7 @@
 * need to validate that current creep spawning code works well for low energy rooms
 
 ## Idea Pool
+* have a max number of transports since we'll hit a mining cap
 * wait to spawn creeps till we've got an optimal amount of energy
 * generate_blueprint: need more granular cost control
 * need priority on buildings: eg creeps are reparing containers before building extensions -extensions more important

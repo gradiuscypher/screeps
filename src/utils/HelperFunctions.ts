@@ -67,7 +67,8 @@ export class HelperFunctions {
 
     public find_energy_source(room: Room, creep: Creep, ignore_storage: boolean = false, ignore_containers: boolean = false, ignore_sources: boolean = false): StructureStorage | StructureContainer | Source | null {
         // TODO: need a way to ignore mining locations
-        let MIN_ENERGY = creep.store.getCapacity();
+        // let MIN_ENERGY = creep.store.getCapacity();
+        let MIN_ENERGY = 50;
 
         // console.log("===");
         // for (const target_id in Memory.allocations) {
