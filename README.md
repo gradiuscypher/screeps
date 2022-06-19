@@ -3,6 +3,7 @@
 # Bug List
 * If a creep is on a construction spot, it can't be worked on
   * logic in our constructor to move to a different spot if it cant reach one it's been trying
+* transporters get stuck with destination and wont do anything
 
 # Tasks
 ## Current Work

@@ -12,7 +12,7 @@ export class Transport {
     public primary() {
         if (this.creep.store.getUsedCapacity() === 0) {
             // TODO: this will still give the creep sources, even though it wont have the parts for harvesting
-            let source = helper.find_energy_source(this.creep.room, this.creep, true);
+            let source = helper.find_energy_source(this.creep.room, this.creep, true, false, true);
 
             if (source instanceof StructureContainer || source instanceof StructureStorage) {
                 if (source && this.creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
