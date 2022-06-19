@@ -26,6 +26,7 @@
 * need to validate that current creep spawning code works well for low energy rooms
 
 ## Idea Pool
+* if builders arent doing things for a while they should repair
 * have a max number of transports since we'll hit a mining cap
 * wait to spawn creeps till we've got an optimal amount of energy
 * generate_blueprint: need more granular cost control

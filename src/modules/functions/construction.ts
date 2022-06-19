@@ -9,7 +9,7 @@ export class Construction {
         this.build_extension(room);
         this.build_mining_containers(room);
         this.build_tower(room);
-        // this.build_roads(room, false);
+        this.build_roads(room, false);
         // this.build_extension_roads(room);
     }
     private build_mining_containers(room: Room) {
