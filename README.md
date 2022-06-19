@@ -6,11 +6,9 @@
 
 # Tasks
 ## Current Work
-* allocation calculation is giving one container
-* find_energy_source MAX_ENERGY needs to be calculated
+* something is making the allocation calc go negative still
 * harvesters should clean up energy on the ground
 * emergency harvester spawning doesnt work cuz I still spawn other creeps which increases the overall creep count past 2
-* load balance find_energy_source
 * detailed logs to keep track of whats going on, can store in DD
 * creep refactor - more flexible creeps with more generic systems
 * creep bodies are built for roads, need to build roads.
