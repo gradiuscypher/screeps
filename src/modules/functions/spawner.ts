@@ -1,11 +1,11 @@
 export class Spawner {
     public check_spawns() {
         // max role settings
-        const MAX_BUILDERS = 2;
+        const MAX_BUILDERS = 4;
         const MAX_HARVESTERS = 2;
         const MAX_UPGRADERS = 4;
         const MAX_MINERS = 2;
-        const MAX_TRANSPORT = 2;
+        const MAX_TRANSPORT = 4;
         const REQ_ENERGY = 200;
 
         // role blueprints
@@ -34,7 +34,7 @@ export class Spawner {
 
         // otherwise, spawn regular roles
         // compare the role counts to the current screeps and adjust as needed
-        else if (room.energyAvailable >= room.energyCapacityAvailable / 3) {
+        else if (room.energyAvailable >= room.energyCapacityAvailable / 2) {
             if (harvesters.length < MAX_HARVESTERS) {
                 let body = this.generate_blueprint('worker', room.energyCapacityAvailable);
                 let result = Game.spawns['Spawn1'].spawnCreep(body, 'h' + timestamp, { memory: { role: 'harvester', room: room.name, working: false, task: '', destination: '' } });
@@ -69,23 +69,34 @@ export class Spawner {
      */
     public generate_blueprint(role: string, available_energy: number, roads = true) {
         // TODO: need more granular control for more expensive parts
-        let part_count = Math.max(1, Math.floor((available_energy / 200) / 3));
         let creep_body: BodyPartConstant[] = [];
+        let part_count = 0;
+        let move_count = 0;
+        let remainder = 0;
 
         switch (role) {
             case 'worker':
                 // generic worker to repair, upgrade, etc
-                creep_body.push(...Array(part_count).fill(WORK));
-                creep_body.push(...Array(part_count).fill(CARRY));
-                creep_body.push(...Array(part_count).fill(MOVE));
+                part_count = Math.max(1, Math.floor((available_energy / 2) / 100));
+                move_count = Math.floor(part_count / 2);
+                remainder = part_count - move_count;
+                creep_body.push(...Array(move_count).fill(MOVE));
+                creep_body.push(...Array(Math.floor(remainder / 2)).fill(WORK));
+                creep_body.push(...Array(Math.floor(remainder / 2)).fill(CARRY));
                 return creep_body;
             case 'miner':
-                creep_body.push(...Array(part_count * 2).fill(WORK));
-                creep_body.push(...Array(part_count).fill(MOVE));
+                part_count = Math.max(1, Math.floor((available_energy / 2) / 100));
+                move_count = Math.floor(part_count / 3);
+                remainder = part_count - move_count;
+                creep_body.push(...Array(move_count).fill(MOVE));
+                creep_body.push(...Array(remainder).fill(WORK));
                 return creep_body;
             case 'transport':
-                creep_body.push(...Array(part_count * 2).fill(CARRY));
-                creep_body.push(...Array(part_count).fill(MOVE));
+                part_count = Math.max(1, Math.floor((available_energy / 2) / 50));
+                move_count = Math.floor(part_count / 2);
+                remainder = part_count - move_count;
+                creep_body.push(...Array(move_count).fill(MOVE));
+                creep_body.push(...Array(remainder).fill(CARRY));
                 return creep_body;
         }
 

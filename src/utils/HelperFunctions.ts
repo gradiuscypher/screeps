@@ -43,7 +43,20 @@ export class HelperFunctions {
     public clear_source_allocation(creep: Creep) {
         console.log(`${creep.name} running clear_source_allocation`);
         if (creep.memory.destination in Memory.allocations) {
-            Memory.allocations[creep.memory.destination]--;
+            // somethings made the allocations negative, recount them
+            if (Memory.allocations[creep.memory.destination] < 0) {
+                console.log(`${creep.memory.destination} has a negative allocation`);
+                let aloc_creeps = creep.room.find(FIND_MY_CREEPS, {
+                    filter: (filtercreep) => {
+                        return (filtercreep.memory.destination == creep.memory.destination)
+                    }
+                });
+                console.log(`${creep.memory.destination} is being set to ${aloc_creeps.length}`);
+                Memory.allocations[creep.memory.destination] = aloc_creeps.length;
+            }
+            else {
+                Memory.allocations[creep.memory.destination]--;
+            }
             creep.memory.destination = '';
         }
         else {
@@ -53,15 +66,15 @@ export class HelperFunctions {
     }
 
     public find_energy_source(room: Room, creep: Creep, ignore_storage: boolean = false, ignore_containers: boolean = false, ignore_sources: boolean = false): StructureStorage | StructureContainer | Source | null {
-        // BUG: is there a bug in how energy sources are found and distributed? workers seem to cluster around one
         // TODO: need a way to ignore mining locations
+        // TODO: max energy needs to be calculated based on the creeps pickup ability
         let MIN_ENERGY = 50;
 
-        console.log("===");
-        for (const target_id in Memory.allocations) {
-            console.log(`${target_id}: ${Memory.allocations[target_id]}`);
-        }
-        console.log("===");
+        // console.log("===");
+        // for (const target_id in Memory.allocations) {
+        //     console.log(`${target_id}: ${Memory.allocations[target_id]}`);
+        // }
+        // console.log("===");
 
         // do you already have a destination, just return the object if you do
         if (creep.memory.destination) {

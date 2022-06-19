@@ -6,6 +6,9 @@
 
 # Tasks
 ## Current Work
+* allocation calculation is giving one container
+* find_energy_source MAX_ENERGY needs to be calculated
+* harvesters should clean up energy on the ground
 * emergency harvester spawning doesnt work cuz I still spawn other creeps which increases the overall creep count past 2
 * load balance find_energy_source
 * detailed logs to keep track of whats going on, can store in DD
@@ -24,6 +27,7 @@
 * need to validate that current creep spawning code works well for low energy rooms
 
 ## Idea Pool
+* wait to spawn creeps till we've got an optimal amount of energy
 * generate_blueprint: need more granular cost control
 * need priority on buildings: eg creeps are reparing containers before building extensions -extensions more important
 * Tracking of tasks to try a different task when it's unable to do a task for a certain period of time, prevent deadlock
