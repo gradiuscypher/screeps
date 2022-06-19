@@ -3,7 +3,7 @@ import { HelperFunctions } from "utils/HelperFunctions"
 let helper = new HelperFunctions();
 
 const REPAIR_PERCENT_MIN = 0.2;
-const REPAIR_PERCENT_MAX = 0.4;
+const REPAIR_PERCENT_MAX = 0.6;
 
 export class Builder {
     private creep: Creep;
