@@ -1,6 +1,7 @@
 # gradius' screeps code - Typescript Edition!
 
 # Bug List
+* transport cant take things out of storage, so it wont move from storage to extensions
 * If a creep is on a construction spot, it can't be worked on
   * logic in our constructor to move to a different spot if it cant reach one it's been trying
 
